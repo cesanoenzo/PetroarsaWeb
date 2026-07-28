@@ -26,11 +26,14 @@ jobs:
         with:
           version: 9
 
+      # Sin `cache: pnpm` a propósito: esa opción exige un pnpm-lock.yaml en el
+      # repo y todavía no hay ninguno. Cuando corras `pnpm install` en local y
+      # commitees el lockfile, conviene volver a agregar `cache: pnpm` acá y
+      # cambiar el install de abajo por `pnpm install --frozen-lockfile`.
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
 
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
