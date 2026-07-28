@@ -182,32 +182,38 @@ El formulario usa **Web3Forms** (sin backend, funciona incluso con JavaScript de
 
 ## 6. Deploy en GitHub Pages
 
+Cuenta configurada: **`cesanoenzo`**. Repo: **`PetroarsaWeb`**.
+
 **Una sola vez:**
 
-1. Creá el repositorio en GitHub con el nombre exacto **`PetroarsaWeb`**.
-2. En `astro.config.mjs`, cambiá `SITE` por `https://<TU-USUARIO>.github.io`.
-3. Subí el proyecto:
+1. Creá el repositorio en <https://github.com/new> con el nombre exacto **`PetroarsaWeb`**, sin
+   README, sin `.gitignore` y sin licencia (el repo local ya tiene todo eso).
+2. Conectá el repo local y subí:
 
 ```bash
-git init && git add . && git commit -m "Initial commit" && git branch -M main
+git remote add origin https://github.com/cesanoenzo/PetroarsaWeb.git
 ```
 
 ```bash
-git remote add origin https://github.com/<TU-USUARIO>/PetroarsaWeb.git && git push -u origin main
+git push -u origin main
 ```
 
-4. En **Settings → Pages**, elegí **Source: GitHub Actions** (no "Deploy from a branch").
+3. En **Settings → Pages**, elegí **Source: GitHub Actions** (no "Deploy from a branch").
 
 **De ahí en adelante:** cada `git push` a `main` dispara el workflow de
 `.github/workflows/deploy.yml` y publica solo.
 
-La URL final es `https://<TU-USUARIO>.github.io/PetroarsaWeb/`.
+La URL final es <https://cesanoenzo.github.io/PetroarsaWeb/>.
+
+> **Repo privado:** GitHub Pages sobre un repositorio privado requiere plan **GitHub Pro**. Con
+> cuenta gratuita el workflow compila pero el sitio no queda publicado. Si hace falta, se pasa el
+> repo a público desde *Settings → General → Change repository visibility*, sin tocar el código.
 
 ### Si más adelante se compra un dominio propio
 
 1. Creá `public/CNAME` con una sola línea: `petroarsa.com.ar`.
 2. En `astro.config.mjs`: `site: 'https://petroarsa.com.ar'` y **borrá** la línea `base`.
-3. En el DNS del dominio, un registro `CNAME` apuntando a `<TU-USUARIO>.github.io`.
+3. En el DNS del dominio, un registro `CNAME` apuntando a `cesanoenzo.github.io`.
 
 ---
 
@@ -314,7 +320,6 @@ el banner del hero también salen de esos PDFs.
       proveedor antes de publicar.
 - [ ] **Fotos y fichas técnicas** de los productos.
 - [ ] **Copy revisado** por Marketing.
-- [ ] **Usuario de GitHub** en `astro.config.mjs` (`SITE`).
 
 ---
 
