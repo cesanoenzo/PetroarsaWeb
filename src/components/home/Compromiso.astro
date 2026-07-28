@@ -1,0 +1,48 @@
+---
+import { Icon } from 'astro-icon/components';
+import SectionTitle from '../shared/SectionTitle.astro';
+import valores from '../../data/valores.json';
+---
+
+<section class="contenedor py-20 sm:py-24">
+  <SectionTitle
+    etiqueta="Calidad, ambiente y seguridad"
+    titulo="Nuestro compromiso"
+    bajada="Trabajamos con un Sistema de Gestión de Calidad y con políticas de seguridad y cuidado ambiental auditadas por YPF y por la Superintendencia de Riesgos del Trabajo."
+  />
+
+  <div class="mt-12 grid gap-6 lg:grid-cols-[1.4fr_1fr]">
+    <ul class="grid gap-5 sm:grid-cols-2">
+      {
+        valores.compromiso.map((c, i) => (
+          <li
+            class="revelar tarjeta p-6"
+            style={`transition-delay:${(i % 4) * 80}ms`}
+          >
+            <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
+              <Icon name={c.icono} class="h-5 w-5" />
+            </span>
+            <h3 class="mt-4 text-lg text-brand-ink">{c.titulo}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-brand-ink-soft">{c.detalle}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="revelar rounded-3xl bg-brand-primary p-8 text-white">
+      <h3 class="text-2xl text-white">Política de calidad</h3>
+      <p class="mt-2 text-sm text-white/70">Qué significa para Petroarsa trabajar con calidad:</p>
+
+      <ul class="mt-6 space-y-4">
+        {
+          valores.politicaCalidad.map((p) => (
+            <li class="flex items-start gap-3">
+              <Icon name="lucide:check" class="mt-0.5 h-4 w-4 shrink-0 text-brand-accent-light" />
+              <span class="text-sm leading-relaxed text-white/85">{p}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>

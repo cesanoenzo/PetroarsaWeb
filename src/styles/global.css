@@ -1,0 +1,165 @@
+/* Los temas se importan ANTES de Tailwind para que las variables existan
+   cuando las utilidades (bg-brand-primary, etc.) las consumen. */
+@import './themes/petroarsa.css';
+@import './themes/bridgestone.css';
+@import './themes/ypf.css';
+@import './themes/varta.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem; /* para que las anclas no queden bajo el nav fijo */
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-brand-bg text-brand-ink font-sans antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display), Georgia, serif;
+    font-weight: var(--display-weight, 700);
+    letter-spacing: var(--display-tracking, -0.02em);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Las utilidades de Tailwind (.flex, .grid) le ganan al display:none del
+     user-agent, así que el atributo [hidden] que usa el filtro de catálogo
+     necesita este refuerzo para funcionar sobre las tarjetas. */
+  [hidden] {
+    display: none !important;
+  }
+
+  /* Foco visible en todo el sitio (WCAG 2.1 AA) */
+  :focus-visible {
+    outline: 3px solid var(--brand-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: var(--brand-accent);
+    color: #fff;
+  }
+}
+
+@layer components {
+  .contenedor {
+    @apply mx-auto w-full max-w-content px-5 sm:px-6 lg:px-8;
+  }
+
+  /* Botón primario: hereda el color de la unidad activa */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold
+           transition-all duration-200 ease-out;
+  }
+  .btn-primario {
+    @apply btn bg-brand-primary text-white hover:bg-brand-primary-mid
+           hover:-translate-y-0.5 hover:shadow-lg;
+  }
+  .btn-acento {
+    @apply btn bg-brand-accent text-white hover:bg-brand-accent-light
+           hover:-translate-y-0.5 hover:shadow-lg;
+  }
+  .btn-fantasma {
+    @apply btn border border-brand-line bg-transparent text-brand-ink
+           hover:border-brand-primary hover:text-brand-primary;
+  }
+  .btn-claro {
+    @apply btn bg-white/95 text-brand-ink hover:bg-white hover:-translate-y-0.5 hover:shadow-lg;
+  }
+
+  .etiqueta {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-brand-line
+           bg-brand-bg-alt px-3 py-1 text-xs font-semibold uppercase tracking-wider text-brand-ink-soft;
+  }
+
+  .tarjeta {
+    @apply rounded-2xl border border-brand-line bg-white transition-all duration-300;
+  }
+
+  /* Filete de acento arriba de secciones destacadas */
+  .filete-marca {
+    background: var(--brand-gradient);
+  }
+
+  .prosa {
+    @apply text-brand-ink-soft leading-relaxed;
+  }
+  .prosa h2 {
+    @apply mb-3 mt-8 text-2xl text-brand-ink;
+  }
+  .prosa h3 {
+    @apply mb-2 mt-6 text-xl text-brand-ink;
+  }
+  .prosa p {
+    @apply mb-4;
+  }
+  .prosa ul {
+    @apply mb-4 list-disc space-y-1.5 pl-5;
+  }
+  .prosa ol {
+    @apply mb-4 list-decimal space-y-1.5 pl-5;
+  }
+  .prosa strong {
+    @apply font-semibold text-brand-ink;
+  }
+  .prosa a {
+    @apply font-medium text-brand-primary underline underline-offset-2;
+  }
+}
+
+@layer utilities {
+  /* Animación on-scroll (RF-12). El observer vive en BaseLayout. */
+  .revelar {
+    opacity: 0;
+    transform: translateY(1.25rem);
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .revelar.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .scroll-x-suave {
+    scrollbar-width: thin;
+    scrollbar-color: var(--brand-primary) transparent;
+  }
+  .scroll-x-suave::-webkit-scrollbar {
+    height: 6px;
+  }
+  .scroll-x-suave::-webkit-scrollbar-thumb {
+    background: var(--brand-primary);
+    border-radius: 999px;
+  }
+}
+
+/* Respetar la preferencia de menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+  .revelar {
+    opacity: 1;
+    transform: none;
+  }
+}

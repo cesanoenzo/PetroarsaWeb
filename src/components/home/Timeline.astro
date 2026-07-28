@@ -1,0 +1,45 @@
+---
+import SectionTitle from '../shared/SectionTitle.astro';
+import timeline from '../../data/timeline.json';
+---
+
+<section class="py-20 sm:py-24">
+  <div class="contenedor">
+    <SectionTitle
+      etiqueta="Trayectoria"
+      titulo="De una distribución a seis puntos de venta"
+      bajada="Cada hito es una distribución nueva que nos confiaron nuestros proveedores estratégicos."
+    />
+  </div>
+
+  <!-- Scroll horizontal: en mobile se arrastra, en desktop entra casi completo. -->
+  <div class="relative mt-12">
+    <ol
+      class="scroll-x-suave flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-6 sm:px-6 lg:px-[max(2rem,calc((100vw-78rem)/2+2rem))]"
+    >
+      {
+        timeline.map((h, i) => (
+          <li
+            class="revelar w-[16rem] shrink-0 snap-start sm:w-[18rem]"
+            style={`transition-delay:${Math.min(i, 6) * 70}ms`}
+          >
+            <div class="flex items-center gap-3">
+              <span class="h-3 w-3 shrink-0 rounded-full bg-brand-accent ring-4 ring-brand-accent/20" />
+              <span class="h-px flex-1 bg-brand-line" />
+            </div>
+
+            <div class="mt-5">
+              <p class="font-display text-3xl font-bold text-brand-primary">{h.anio}</p>
+              <h3 class="mt-2 text-base text-brand-ink">{h.titulo}</h3>
+              <p class="mt-1.5 text-sm leading-relaxed text-brand-ink-soft">{h.detalle}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+
+    <p class="contenedor mt-2 text-xs text-brand-ink-soft lg:hidden">
+      Deslizá para ver toda la historia →
+    </p>
+  </div>
+</section>

@@ -1,0 +1,36 @@
+---
+import { Icon } from 'astro-icon/components';
+import { ruta } from '../../lib/url';
+
+interface Props {
+  /** Migas intermedias. La primera (Petroarsa) y la actual se arman acá. */
+  items: { texto: string; href?: string }[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav aria-label="Miga de pan" class="border-b border-brand-line bg-brand-bg">
+  <ol class="contenedor flex flex-wrap items-center gap-1.5 py-3 text-sm text-brand-ink-soft">
+    <li>
+      <a href={ruta('/')} class="transition-colors hover:text-brand-primary">Petroarsa</a>
+    </li>
+
+    {
+      items.map((item, i) => (
+        <li class="flex items-center gap-1.5">
+          <Icon name="lucide:chevron-right" class="h-3.5 w-3.5 opacity-40" />
+          {item.href && i < items.length - 1 ? (
+            <a href={item.href} class="transition-colors hover:text-brand-primary">
+              {item.texto}
+            </a>
+          ) : (
+            <span class="font-medium text-brand-ink" aria-current="page">
+              {item.texto}
+            </span>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>

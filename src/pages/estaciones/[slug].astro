@@ -1,0 +1,25 @@
+---
+import type { GetStaticPaths } from 'astro';
+import ProductoLayout from '../../layouts/ProductoLayout.astro';
+import { productosDeUnidad, slugDe, relacionados, type Producto } from '../../lib/catalogo';
+
+interface Props {
+  producto: Producto;
+  relacionados: Producto[];
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const productos = await productosDeUnidad('estaciones');
+  return productos.map((producto) => ({
+    params: { slug: slugDe(producto) },
+    props: { producto, relacionados: relacionados(producto, productos) },
+  }));
+};
+
+const { producto, relacionados: rel } = Astro.props;
+const { Content } = await producto.render();
+---
+
+<ProductoLayout producto={producto} unidad="estaciones" relacionados={rel}>
+  <Content />
+</ProductoLayout>

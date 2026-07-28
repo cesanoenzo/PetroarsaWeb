@@ -1,0 +1,133 @@
+---
+import { Icon } from 'astro-icon/components';
+import empresa from '../../data/empresa.json';
+import { ruta } from '../../lib/url';
+
+interface Props {
+  /** Unidad preseleccionada cuando el form se embebe en una página de unidad. */
+  unidadPorDefecto?: string;
+  compacto?: boolean;
+}
+
+const { unidadPorDefecto = '', compacto = false } = Astro.props;
+
+const unidadesForm = [
+  { valor: 'bridgestone', texto: 'Bridgestone — Neumáticos y servicios' },
+  { valor: 'ypf-agro', texto: 'YPF Agro — Distribución mayorista' },
+  { valor: 'estaciones', texto: 'Estaciones de Servicio YPF' },
+  { valor: 'rrhh', texto: 'RRHH — Trabajá con nosotros' },
+  { valor: 'otra', texto: 'Otra consulta' },
+];
+
+// Web3Forms: submit tradicional (funciona sin JavaScript, RF/instrucción 14).
+// La access key se configura en src/data/empresa.json.
+const ACTION = 'https://api.web3forms.com/submit';
+const urlGracias = new URL(ruta('/contacto/?enviado=1'), Astro.site).toString();
+---
+
+<form
+  action={ACTION}
+  method="POST"
+  class:list={['grid gap-4', compacto ? 'sm:grid-cols-1' : 'sm:grid-cols-2']}
+>
+  <input type="hidden" name="access_key" value={empresa.formulario.accessKey} />
+  <input type="hidden" name="subject" value="Nueva consulta desde petroarsa.com.ar" />
+  <input type="hidden" name="from_name" value="Sitio web Petroarsa" />
+  <input type="hidden" name="redirect" value={urlGracias} />
+  <!-- Honeypot anti-spam: si un bot lo completa, Web3Forms descarta el envío. -->
+  <input type="checkbox" name="botcheck" class="hidden" style="display:none" tabindex="-1" aria-hidden="true" />
+
+  <div class="flex flex-col gap-1.5">
+    <label for="nombre" class="text-sm font-semibold text-brand-ink">Nombre y apellido *</label>
+    <input
+      id="nombre"
+      name="nombre"
+      type="text"
+      required
+      autocomplete="name"
+      class="rounded-xl border border-brand-line bg-white px-4 py-3 text-sm outline-none transition-colors focus:border-brand-primary"
+      placeholder="Cómo te llamás"
+    />
+  </div>
+
+  <div class="flex flex-col gap-1.5">
+    <label for="email" class="text-sm font-semibold text-brand-ink">Email *</label>
+    <input
+      id="email"
+      name="email"
+      type="email"
+      required
+      autocomplete="email"
+      class="rounded-xl border border-brand-line bg-white px-4 py-3 text-sm outline-none transition-colors focus:border-brand-primary"
+      placeholder="tu@email.com"
+    />
+  </div>
+
+  <div class="flex flex-col gap-1.5">
+    <label for="telefono" class="text-sm font-semibold text-brand-ink">Teléfono</label>
+    <input
+      id="telefono"
+      name="telefono"
+      type="tel"
+      autocomplete="tel"
+      class="rounded-xl border border-brand-line bg-white px-4 py-3 text-sm outline-none transition-colors focus:border-brand-primary"
+      placeholder="381 000 0000"
+    />
+  </div>
+
+  <div class="flex flex-col gap-1.5">
+    <label for="unidad" class="text-sm font-semibold text-brand-ink">¿Sobre qué consultás? *</label>
+    <select
+      id="unidad"
+      name="unidad"
+      required
+      class="rounded-xl border border-brand-line bg-white px-4 py-3 text-sm outline-none transition-colors focus:border-brand-primary"
+    >
+      <option value="">Elegí una opción</option>
+      {
+        unidadesForm.map((u) => (
+          <option value={u.valor} selected={u.valor === unidadPorDefecto}>
+            {u.texto}
+          </option>
+        ))
+      }
+    </select>
+  </div>
+
+  <div class="flex flex-col gap-1.5 sm:col-span-2">
+    <label for="mensaje" class="text-sm font-semibold text-brand-ink">Mensaje *</label>
+    <textarea
+      id="mensaje"
+      name="mensaje"
+      rows="5"
+      required
+      class="rounded-xl border border-brand-line bg-white px-4 py-3 text-sm outline-none transition-colors focus:border-brand-primary"
+      placeholder="Contanos qué producto o servicio necesitás, cantidades aproximadas y en qué localidad estás."></textarea>
+  </div>
+
+  <div class="flex flex-col gap-3 sm:col-span-2 sm:flex-row sm:items-center sm:justify-between">
+    <p class="text-xs text-brand-ink-soft">
+      Los campos con * son obligatorios. Te respondemos dentro de las 48 hs hábiles.
+    </p>
+    <button type="submit" class="btn-primario shrink-0">
+      Enviar consulta
+      <Icon name="lucide:send" class="h-4 w-4" />
+    </button>
+  </div>
+</form>
+
+<script>
+  // RF-08: si la URL trae ?unidad=..., preseleccionamos el select.
+  // Es progresivo: sin JS el form igual funciona con la opción por defecto.
+  function preseleccionarUnidad() {
+    const params = new URLSearchParams(window.location.search);
+    const unidad = params.get('unidad');
+    if (!unidad) return;
+    document.querySelectorAll<HTMLSelectElement>('select[name="unidad"]').forEach((select) => {
+      if ([...select.options].some((o) => o.value === unidad)) select.value = unidad;
+    });
+  }
+
+  preseleccionarUnidad();
+  document.addEventListener('astro:page-load', preseleccionarUnidad);
+</script>

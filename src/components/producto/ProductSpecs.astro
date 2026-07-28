@@ -1,0 +1,30 @@
+---
+interface Props {
+  especificaciones?: { label: string; value: string }[];
+  titulo?: string;
+}
+
+const { especificaciones = [], titulo = 'Especificaciones técnicas' } = Astro.props;
+---
+
+{
+  especificaciones.length > 0 && (
+    <section class="revelar">
+      <h2 class="text-xl text-brand-ink">{titulo}</h2>
+
+      <dl class="mt-4 overflow-hidden rounded-2xl border border-brand-line">
+        {especificaciones.map((e, i) => (
+          <div
+            class:list={[
+              'grid grid-cols-1 gap-1 px-5 py-4 sm:grid-cols-[14rem_1fr] sm:gap-4',
+              i % 2 === 0 ? 'bg-white' : 'bg-brand-bg-alt',
+            ]}
+          >
+            <dt class="text-sm font-semibold text-brand-ink">{e.label}</dt>
+            <dd class="text-sm text-brand-ink-soft">{e.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  )
+}

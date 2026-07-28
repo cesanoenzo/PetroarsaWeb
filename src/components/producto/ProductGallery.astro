@@ -1,0 +1,80 @@
+---
+import { asset } from '../../lib/url';
+
+interface Props {
+  principal: string;
+  secundarias?: string[];
+  alt: string;
+}
+
+const { principal, secundarias = [], alt } = Astro.props;
+const todas = [principal, ...secundarias];
+---
+
+<div class="flex flex-col gap-4" data-galeria>
+  <div class="overflow-hidden rounded-2xl border border-brand-line bg-white">
+    <img
+      id="galeria-principal"
+      src={asset(principal)}
+      alt={alt}
+      width="900"
+      height="900"
+      fetchpriority="high"
+      class="aspect-square w-full object-contain p-6"
+    />
+  </div>
+
+  {
+    todas.length > 1 && (
+      <ul class="grid grid-cols-4 gap-3">
+        {todas.map((img, i) => (
+          <li>
+            <button
+              type="button"
+              data-miniatura
+              data-src={asset(img)}
+              aria-label={`Ver imagen ${i + 1} de ${alt}`}
+              aria-pressed={i === 0 ? 'true' : 'false'}
+              class="w-full overflow-hidden rounded-xl border-2 border-brand-line bg-white transition-colors aria-pressed:border-brand-primary"
+            >
+              <img
+                src={asset(img)}
+                alt=""
+                width="200"
+                height="200"
+                loading="lazy"
+                decoding="async"
+                class="aspect-square w-full object-contain p-2"
+              />
+            </button>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</div>
+
+<script>
+  function initGaleria() {
+    document.querySelectorAll<HTMLElement>('[data-galeria]').forEach((galeria) => {
+      if (galeria.dataset.listo === 'si') return;
+      galeria.dataset.listo = 'si';
+
+      const principal = galeria.querySelector<HTMLImageElement>('#galeria-principal');
+      const miniaturas = galeria.querySelectorAll<HTMLButtonElement>('[data-miniatura]');
+      if (!principal) return;
+
+      miniaturas.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const src = btn.dataset.src;
+          if (!src) return;
+          principal.src = src;
+          miniaturas.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+        });
+      });
+    });
+  }
+
+  initGaleria();
+  document.addEventListener('astro:page-load', initGaleria);
+</script>

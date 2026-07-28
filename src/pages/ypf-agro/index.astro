@@ -1,0 +1,290 @@
+---
+import { Icon } from 'astro-icon/components';
+import UnidadLayout from '../../layouts/UnidadLayout.astro';
+import UnidadHero from '../../components/unidad/UnidadHero.astro';
+import ProductFilter from '../../components/unidad/ProductFilter.astro';
+import ProductGrid from '../../components/unidad/ProductGrid.astro';
+import SucursalesUnidad from '../../components/unidad/SucursalesUnidad.astro';
+import SectionTitle from '../../components/shared/SectionTitle.astro';
+import CTA from '../../components/shared/CTA.astro';
+import { productosDeUnidad, categoriasDe, marcasDe, type Producto } from '../../lib/catalogo';
+
+const productos = await productosDeUnidad('ypf-agro');
+const categorias = categoriasDe(productos);
+const marcas = marcasDe(productos);
+
+/**
+ * El catálogo de YPF Agro se navega por FAMILIA de producto.
+ * Cada familia declara qué categorías (del frontmatter) le corresponden.
+ * Al agregar una categoría nueva en un .md, sumala también acá para que
+ * aparezca en el bloque correcto; si no, cae en "Otros productos".
+ */
+const familias = [
+  {
+    id: 'combustibles',
+    nombre: 'Combustibles',
+    icono: 'lucide:fuel',
+    detalle: 'Infinia, Súper, Diésel 500 y Ultradiésel para flota, campo e industria.',
+    categorias: ['Combustible'],
+  },
+  {
+    id: 'lubricantes',
+    nombre: 'Lubricantes',
+    icono: 'lucide:droplets',
+    detalle: 'Línea Elaion para auto, camión, agro, industria y moto.',
+    categorias: [
+      'Lubricante para auto',
+      'Lubricante para camión',
+      'Lubricante agrícola',
+      'Lubricante industrial',
+      'Lubricante para moto',
+    ],
+  },
+  {
+    id: 'fertilizantes',
+    nombre: 'Fertilizantes',
+    icono: 'lucide:sprout',
+    detalle: 'Nitrogenados, fosfatados, mezclas físicas y líquidos.',
+    categorias: ['Fertilizante'],
+  },
+  {
+    id: 'agroquimicos',
+    nombre: 'Agroquímicos',
+    icono: 'lucide:spray-can',
+    detalle: 'Herbicidas, insecticidas, fungicidas y coadyuvantes.',
+    categorias: ['Agroquímico'],
+  },
+  {
+    id: 'semillas',
+    nombre: 'Semillas',
+    icono: 'lucide:wheat',
+    detalle: 'Soja, maíz, trigo y forrajeras para la zona NOA.',
+    categorias: ['Semilla'],
+  },
+  {
+    id: 'silobolsas',
+    nombre: 'Silobolsas',
+    icono: 'lucide:package',
+    detalle: 'Silobolsas y accesorios para almacenaje de grano.',
+    categorias: ['Silobolsa'],
+  },
+];
+
+// VARTA se muestra aparte porque lleva su propia paleta (sub-tema).
+const productosVarta = productos.filter((p) => p.data.marca === 'VARTA');
+const productosSinVarta = productos.filter((p) => p.data.marca !== 'VARTA');
+
+const porFamilia = familias.map((f) => ({
+  ...f,
+  productos: productosSinVarta.filter((p) => f.categorias.includes(p.data.categoria)),
+}));
+
+// Cualquier producto cuya categoría no esté mapeada arriba.
+const categoriasMapeadas = familias.flatMap((f) => f.categorias);
+const otros: Producto[] = productosSinVarta.filter(
+  (p) => !categoriasMapeadas.includes(p.data.categoria)
+);
+
+const familiasVisibles = porFamilia.filter((f) => f.productos.length > 0);
+
+// Ids de todas las grillas, para que un solo panel de filtros las controle.
+const idsGrillas = [
+  ...familiasVisibles.map((f) => `grid-${f.id}`),
+  ...(otros.length ? ['grid-otros'] : []),
+  ...(productosVarta.length ? ['grid-varta'] : []),
+].join(',');
+---
+
+<UnidadLayout
+  unidad="ypf-agro"
+  titulo="YPF Agro — Distribución mayorista en el NOA"
+  descripcion="Distribución mayorista YPF para el sector agropecuario, transportista e industrial: combustibles, lubricantes, fertilizantes, agroquímicos, semillas, silobolsas y baterías VARTA."
+>
+  <UnidadHero
+    slot="hero"
+    etiqueta="Unidad de negocio"
+    titulo="Distribución mayorista YPF en el NOA"
+    bajada="Combustibles, lubricantes y agroinsumos para el productor, el transportista y la industria. Dos plantas propias en Tucumán con logística para toda la región."
+    imagen="/imagenes/sucursales/ypf-agro-cevil-pozo.jpg"
+    logoPartner="/logos-partners/ypf-agro.svg"
+    acciones={[
+      { texto: 'Ver catálogo', href: '#catalogo-seccion', primaria: true },
+      { texto: 'Nuestras plantas', href: '#sucursales' },
+    ]}
+  />
+
+  <!-- Sobre la unidad -->
+  <section class="contenedor py-16 sm:py-20">
+    <div class="grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
+      <div>
+        <SectionTitle
+          etiqueta="Sobre la unidad"
+          titulo="El mayorista que le resuelve la temporada al productor"
+        />
+        <p class="revelar prosa mt-6">
+          Somos distribuidores YPF desde 1996. Lo que arrancó con combustibles y lubricantes hoy
+          incluye fertilizantes, agroquímicos, semillas y silobolsas: la temporada completa, con un
+          solo proveedor y una sola logística.
+        </p>
+        <p class="revelar prosa">
+          Atendemos al sector agropecuario, al transportista y al industrial desde nuestras plantas
+          de Cevil Pozo y Concepción, con asesoramiento técnico y entrega en campo.
+        </p>
+      </div>
+
+      <ul class="grid gap-4 sm:grid-cols-2">
+        {
+          [
+            { t: 'Entrega en campo', d: 'Logística propia para granel, big bag y bidón.', i: 'lucide:truck' },
+            { t: 'Asesoramiento', d: 'Recomendación de producto según cultivo y zona.', i: 'lucide:clipboard-check' },
+            { t: 'Respaldo YPF', d: 'Producto original con trazabilidad y ficha técnica.', i: 'lucide:shield-check' },
+            { t: 'Cuenta corriente', d: 'Condiciones comerciales para clientes habituales.', i: 'lucide:credit-card' },
+          ].map((s, i) => (
+            <li class="revelar tarjeta p-5" style={`transition-delay:${i * 80}ms`}>
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-brand-primary text-white">
+                <Icon name={s.i} class="h-5 w-5" />
+              </span>
+              <h3 class="mt-3.5 text-base text-brand-ink">{s.t}</h3>
+              <p class="mt-1.5 text-sm leading-relaxed text-brand-ink-soft">{s.d}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Catálogo por familias -->
+  <section id="catalogo-seccion" class="contenedor scroll-mt-24 py-16 sm:py-20">
+    <SectionTitle
+      etiqueta="Catálogo"
+      titulo="Seis familias de producto"
+      bajada="Navegá por familia o usá el buscador para encontrar un producto puntual."
+    />
+
+    <!-- Sub-menú de familias: son anclas, así que funciona sin JavaScript. -->
+    <nav aria-label="Familias de producto" class="revelar mt-8">
+      <ul class="scroll-x-suave flex gap-2 overflow-x-auto pb-2">
+        {
+          familiasVisibles.map((f) => (
+            <li>
+              <a
+                href={`#familia-${f.id}`}
+                class="inline-flex shrink-0 items-center gap-2 rounded-full border border-brand-line bg-white px-4 py-2.5 text-sm font-medium text-brand-ink transition-colors hover:border-brand-primary hover:text-brand-primary"
+              >
+                <Icon name={f.icono} class="h-4 w-4 text-brand-primary" />
+                {f.nombre}
+              </a>
+            </li>
+          ))
+        }
+        {
+          productosVarta.length > 0 && (
+            <li>
+              <a
+                href="#familia-varta"
+                class="inline-flex shrink-0 items-center gap-2 rounded-full border border-brand-line bg-white px-4 py-2.5 text-sm font-medium text-brand-ink transition-colors hover:border-brand-primary hover:text-brand-primary"
+              >
+                <Icon name="lucide:battery-charging" class="h-4 w-4 text-brand-primary" />
+                Baterías VARTA
+              </a>
+            </li>
+          )
+        }
+      </ul>
+    </nav>
+
+    <div class="mt-6">
+      <ProductFilter categorias={categorias} marcas={marcas} objetivo={idsGrillas} />
+    </div>
+
+    <!-- Un bloque por familia -->
+    <div class="mt-14 space-y-16">
+      {
+        familiasVisibles.map((f) => (
+          <section id={`familia-${f.id}`} data-seccion-familia class="scroll-mt-28">
+            <header class="revelar flex flex-wrap items-end justify-between gap-4 border-b border-brand-line pb-4">
+              <div class="flex items-center gap-3">
+                <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-primary text-white">
+                  <Icon name={f.icono} class="h-5 w-5" />
+                </span>
+                <div>
+                  <h3 class="text-2xl text-brand-ink">{f.nombre}</h3>
+                  <p class="mt-0.5 text-sm text-brand-ink-soft">{f.detalle}</p>
+                </div>
+              </div>
+              <span class="text-xs font-semibold uppercase tracking-wider text-brand-ink-soft">
+                {f.productos.length} producto{f.productos.length === 1 ? '' : 's'}
+              </span>
+            </header>
+
+            <div class="mt-8 space-y-6">
+              <ProductGrid productos={f.productos} unidad="ypf-agro" id={`grid-${f.id}`} />
+            </div>
+          </section>
+        ))
+      }
+
+      {
+        otros.length > 0 && (
+          <section id="familia-otros" data-seccion-familia class="scroll-mt-28">
+            <header class="revelar border-b border-brand-line pb-4">
+              <h3 class="text-2xl text-brand-ink">Otros productos</h3>
+            </header>
+            <div class="mt-8 space-y-6">
+              <ProductGrid productos={otros} unidad="ypf-agro" id="grid-otros" />
+            </div>
+          </section>
+        )
+      }
+    </div>
+  </section>
+
+  <!--
+    Bloque VARTA: `data-theme="varta"` acá adentro reemplaza todas las
+    variables de marca para este subárbol. El resto de la página sigue en azul
+    YPF. Es exactamente el mismo mecanismo que usa el <html>, pero acotado.
+  -->
+  {
+    productosVarta.length > 0 && (
+      <section
+        id="familia-varta"
+        data-theme="varta"
+        data-seccion-familia
+        class="scroll-mt-24 bg-brand-primary py-16 sm:py-20"
+      >
+        <div class="contenedor">
+          <div class="revelar flex flex-wrap items-center justify-between gap-6">
+            <div class="max-w-2xl">
+              <p class="text-xs font-bold uppercase tracking-[0.18em] text-brand-accent">
+                Sub-catálogo
+              </p>
+              <h2 class="mt-3 text-3xl text-white sm:text-4xl">Baterías VARTA</h2>
+              <p class="mt-4 text-white/75">
+                Distribuidores oficiales desde 1998. Baterías de arranque para auto, camioneta,
+                transporte y maquinaria agrícola, con garantía y servicio de instalación.
+              </p>
+            </div>
+            <span class="h-14 w-px bg-white/20 max-lg:hidden" />
+          </div>
+
+          <div class="mt-10 space-y-6 [--brand-bg-alt:#123a63]">
+            <ProductGrid productos={productosVarta} unidad="ypf-agro" id="grid-varta" />
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <SucursalesUnidad
+    unidad="ypf-agro"
+    titulo="Nuestras plantas"
+    bajada="Dos centros de distribución mayorista sobre las rutas que conectan la producción tucumana."
+  />
+
+  <CTA
+    titulo="¿Armamos tu campaña?"
+    bajada="Contanos superficie, cultivo y fechas, y te preparamos una propuesta de insumos y logística."
+    unidad="ypf-agro"
+    textoBoton="Pedir cotización"
+  />
+</UnidadLayout>

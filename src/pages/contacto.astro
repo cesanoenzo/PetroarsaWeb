@@ -1,0 +1,169 @@
+---
+import { Icon } from 'astro-icon/components';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionTitle from '../components/shared/SectionTitle.astro';
+import ContactForm from '../components/shared/ContactForm.astro';
+import empresa from '../data/empresa.json';
+import sucursales from '../data/sucursales.json';
+
+// Ojo: en un sitio estático el query param NO está disponible en el servidor.
+// La preselección de unidad la resuelve el script de ContactForm en el cliente.
+const wa = `https://wa.me/${empresa.contacto.whatsapp}`;
+
+const mapaSrc =
+  'https://www.google.com/maps?q=Yerba%20Buena%2C%20Tucum%C3%A1n%2C%20Argentina&z=11&output=embed';
+---
+
+<BaseLayout
+  titulo="Contacto"
+  descripcion="Escribinos para consultar por neumáticos Bridgestone, distribución mayorista YPF Agro, estaciones de servicio o búsquedas laborales. Petroarsa S.A., Tucumán."
+>
+  <section class="border-b border-brand-line bg-brand-bg-alt py-16 sm:py-20">
+    <div class="contenedor">
+      <SectionTitle
+        etiqueta="Contacto"
+        titulo="Hablemos"
+        bajada="Escribinos y te derivamos con el asesor de la unidad que corresponda. Respondemos dentro de las 48 hs hábiles."
+      />
+    </div>
+  </section>
+
+  <section class="contenedor py-16 sm:py-20">
+    <div class="grid gap-12 lg:grid-cols-[1fr_20rem] lg:gap-16">
+      <!-- Formulario -->
+      <div>
+        <!-- Aviso de envío exitoso (Web3Forms redirige con ?enviado=1) -->
+        <div
+          id="aviso-enviado"
+          hidden
+          class="mb-8 flex items-start gap-3 rounded-2xl border border-brand-primary/30 bg-brand-primary/5 p-5"
+        >
+          <Icon name="lucide:check" class="mt-0.5 h-5 w-5 shrink-0 text-brand-primary" />
+          <div>
+            <p class="font-semibold text-brand-ink">¡Listo! Recibimos tu consulta.</p>
+            <p class="mt-1 text-sm text-brand-ink-soft">
+              Te vamos a responder al email que dejaste. Gracias por escribirnos.
+            </p>
+          </div>
+        </div>
+
+        <h2 class="text-2xl text-brand-ink">Escribinos</h2>
+        <p class="prosa mt-2">Completá el formulario y te contactamos.</p>
+
+        <div class="mt-8">
+          <ContactForm />
+        </div>
+      </div>
+
+      <!-- Datos institucionales -->
+      <aside class="space-y-6">
+        <div class="tarjeta p-6">
+          <h2 class="text-lg text-brand-ink">Datos de contacto</h2>
+
+          <ul class="mt-4 space-y-4 text-sm">
+            <li class="flex items-start gap-3">
+              <Icon name="lucide:mail" class="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" />
+              <div>
+                <p class="font-semibold text-brand-ink">Email</p>
+                <a
+                  href={`mailto:${empresa.contacto.email}`}
+                  class="text-brand-ink-soft hover:text-brand-primary"
+                >
+                  {empresa.contacto.email}
+                </a>
+              </div>
+            </li>
+
+            <li class="flex items-start gap-3">
+              <Icon name="lucide:briefcase" class="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" />
+              <div>
+                <p class="font-semibold text-brand-ink">Búsquedas laborales</p>
+                <a
+                  href={`mailto:${empresa.contacto.emailRRHH}`}
+                  class="text-brand-ink-soft hover:text-brand-primary"
+                >
+                  {empresa.contacto.emailRRHH}
+                </a>
+              </div>
+            </li>
+
+            <li class="flex items-start gap-3">
+              <Icon name="lucide:phone" class="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" />
+              <div>
+                <p class="font-semibold text-brand-ink">Teléfono</p>
+                <a
+                  href={`tel:${empresa.contacto.telefono.replace(/\s/g, '')}`}
+                  class="text-brand-ink-soft hover:text-brand-primary"
+                >
+                  {empresa.contacto.telefono}
+                </a>
+              </div>
+            </li>
+
+            <li class="flex items-start gap-3">
+              <Icon
+                name="lucide:message-circle"
+                class="mt-0.5 h-4 w-4 shrink-0 text-brand-primary"
+              />
+              <div>
+                <p class="font-semibold text-brand-ink">WhatsApp</p>
+                <a href={wa} target="_blank" rel="noopener" class="text-brand-ink-soft hover:text-brand-primary">
+                  Abrir chat
+                </a>
+              </div>
+            </li>
+
+            <li class="flex items-start gap-3">
+              <Icon name="lucide:map-pin" class="mt-0.5 h-4 w-4 shrink-0 text-brand-primary" />
+              <div>
+                <p class="font-semibold text-brand-ink">Administración</p>
+                <p class="text-brand-ink-soft">{empresa.contacto.direccionAdministrativa}</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="tarjeta p-6">
+          <h2 class="text-lg text-brand-ink">Puntos de venta</h2>
+          <ul class="mt-4 space-y-3 text-sm">
+            {
+              sucursales.map((s) => (
+                <li>
+                  <p class="font-semibold text-brand-ink">{s.nombre}</p>
+                  <p class="text-brand-ink-soft">
+                    {s.direccion} — {s.localidad}
+                  </p>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Mapa (RF-10) -->
+  <section class="border-t border-brand-line">
+    <iframe
+      title="Ubicación de las sucursales de Petroarsa en Tucumán"
+      src={mapaSrc}
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      class="h-[24rem] w-full sm:h-[28rem]"></iframe>
+  </section>
+</BaseLayout>
+
+<script>
+  // Muestra el cartel de éxito cuando Web3Forms nos devuelve con ?enviado=1
+  function mostrarAviso() {
+    const aviso = document.getElementById('aviso-enviado');
+    if (!aviso) return;
+    if (new URLSearchParams(window.location.search).get('enviado') === '1') {
+      aviso.hidden = false;
+      aviso.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  mostrarAviso();
+  document.addEventListener('astro:page-load', mostrarAviso);
+</script>

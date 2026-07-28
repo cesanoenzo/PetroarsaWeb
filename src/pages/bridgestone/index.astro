@@ -1,0 +1,138 @@
+---
+import { Icon } from 'astro-icon/components';
+import UnidadLayout from '../../layouts/UnidadLayout.astro';
+import UnidadHero from '../../components/unidad/UnidadHero.astro';
+import ProductFilter from '../../components/unidad/ProductFilter.astro';
+import ProductGrid from '../../components/unidad/ProductGrid.astro';
+import SucursalesUnidad from '../../components/unidad/SucursalesUnidad.astro';
+import SectionTitle from '../../components/shared/SectionTitle.astro';
+import CTA from '../../components/shared/CTA.astro';
+import { productosDeUnidad, categoriasDe, marcasDe } from '../../lib/catalogo';
+
+const productos = await productosDeUnidad('bridgestone');
+const categorias = categoriasDe(productos);
+const marcas = marcasDe(productos);
+
+const servicios = [
+  { titulo: 'Alineación', detalle: 'Geometría de dirección con equipo computarizado.', icono: 'lucide:crosshair' },
+  { titulo: 'Balanceo', detalle: 'Balanceo de ruedas para eliminar vibraciones y desgaste irregular.', icono: 'lucide:disc-3' },
+  { titulo: 'Tren delantero', detalle: 'Diagnóstico y reparación de rótulas, extremos y bujes.', icono: 'lucide:wrench' },
+  { titulo: 'Suspensión', detalle: 'Amortiguadores, espirales y control de altura.', icono: 'lucide:car-front' },
+];
+
+const segmentos = [
+  { titulo: 'Auto', detalle: 'Urbanos, sedanes y performance.', icono: 'lucide:car' },
+  { titulo: 'Camioneta y SUV', detalle: 'On-road, all terrain y mud terrain.', icono: 'lucide:truck' },
+  { titulo: 'Transporte', detalle: 'Larga distancia, regional y urbano.', icono: 'lucide:bus' },
+  { titulo: 'Agrícola', detalle: 'Tractores, cosechadoras e implementos.', icono: 'lucide:tractor' },
+  { titulo: 'Vial', detalle: 'Retroexcavadoras, palas y motoniveladoras.', icono: 'lucide:construction' },
+  { titulo: 'Industrial', detalle: 'Autoelevadores y equipos de planta.', icono: 'lucide:forklift' },
+];
+---
+
+<UnidadLayout
+  unidad="bridgestone"
+  titulo="Neumáticos Bridgestone y Firestone en Tucumán"
+  descripcion="Centro de Servicios Bridgestone de Petroarsa: neumáticos para auto, camioneta, transporte, agrícolas, viales e industriales, con alineación, balanceo y tren delantero."
+>
+  <UnidadHero
+    slot="hero"
+    etiqueta="Unidad de negocio"
+    titulo="Neumáticos Bridgestone en Tucumán"
+    bajada="Centro de servicios oficial con stock de Bridgestone y Firestone para todos los segmentos, y taller propio para alineación, balanceo, suspensión y tren delantero."
+    imagen="/imagenes/sucursales/bts-lastenia.jpg"
+    logoPartner="/logos-partners/bridgestone.svg"
+    acciones={[
+      { texto: 'Ver catálogo', href: '#catalogo-seccion', primaria: true },
+      { texto: 'Cómo llegar', href: '#sucursales' },
+    ]}
+  />
+
+  <!-- Sobre la unidad -->
+  <section class="contenedor py-16 sm:py-20">
+    <div class="grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
+      <div>
+        <SectionTitle
+          etiqueta="Sobre la unidad"
+          titulo="Neumáticos, sí. Pero también el servicio que los cuida."
+        />
+        <p class="revelar prosa mt-6">
+          Desde 2009 distribuimos neumáticos Bridgestone y Firestone en Tucumán. Trabajamos con dos
+          centros de servicio: uno en Yerba Buena, pensado para auto y camioneta, y BTS Lastenia
+          sobre la Ruta 9, preparado para transporte, agro y equipos viales.
+        </p>
+        <p class="revelar prosa">
+          Además de la venta, hacemos el servicio técnico completo para que el neumático rinda lo
+          que tiene que rendir: si el tren delantero está desalineado, la goma se come sola.
+        </p>
+      </div>
+
+      <ul class="grid gap-4 sm:grid-cols-2">
+        {
+          servicios.map((s, i) => (
+            <li class="revelar tarjeta p-5" style={`transition-delay:${i * 80}ms`}>
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-brand-primary text-white">
+                <Icon name={s.icono} class="h-5 w-5" />
+              </span>
+              <h3 class="mt-3.5 text-base text-brand-ink">{s.titulo}</h3>
+              <p class="mt-1.5 text-sm leading-relaxed text-brand-ink-soft">{s.detalle}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Segmentos -->
+  <section class="bg-brand-bg-alt py-16 sm:py-20">
+    <div class="contenedor">
+      <SectionTitle
+        etiqueta="Segmentos"
+        titulo="Un neumático para cada uso"
+        bajada="Cubrimos desde el auto de todos los días hasta la cosechadora y el equipo vial."
+      />
+
+      <ul class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          segmentos.map((s, i) => (
+            <li
+              class="revelar flex items-start gap-4 rounded-2xl border border-brand-line bg-white p-5 transition-all hover:-translate-y-1 hover:shadow-lg"
+              style={`transition-delay:${(i % 3) * 80}ms`}
+            >
+              <span class="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
+                <Icon name={s.icono} class="h-5 w-5" />
+              </span>
+              <div>
+                <h3 class="text-base text-brand-ink">{s.titulo}</h3>
+                <p class="mt-1 text-sm text-brand-ink-soft">{s.detalle}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Catálogo -->
+  <section id="catalogo-seccion" class="contenedor scroll-mt-24 py-16 sm:py-20">
+    <SectionTitle etiqueta="Catálogo" titulo="Nuestros productos" />
+
+    <div class="mt-8 space-y-6">
+      <ProductFilter categorias={categorias} marcas={marcas} objetivo="catalogo-bridgestone" />
+      <ProductGrid productos={productos} unidad="bridgestone" id="catalogo-bridgestone" />
+    </div>
+  </section>
+
+  <SucursalesUnidad
+    unidad="bridgestone"
+    titulo="Nuestros centros de servicio"
+    bajada="Dos puntos en Tucumán, uno para vehículo liviano y otro preparado para transporte, agro y vial."
+  />
+
+  <CTA
+    titulo="¿Buscás una medida puntual?"
+    bajada="Consultanos stock, precios y turnos de taller. Te respondemos con la disponibilidad real."
+    unidad="bridgestone"
+    textoBoton="Consultar stock"
+  />
+</UnidadLayout>

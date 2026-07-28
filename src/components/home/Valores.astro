@@ -1,0 +1,33 @@
+---
+import { Icon } from 'astro-icon/components';
+import SectionTitle from '../shared/SectionTitle.astro';
+import valores from '../../data/valores.json';
+---
+
+<section class="bg-brand-bg-alt py-20 sm:py-24">
+  <div class="contenedor">
+    <SectionTitle
+      etiqueta="Cultura"
+      titulo="Nuestros valores"
+      bajada="Cinco valores que ordenan cómo trabajamos puertas adentro y cómo nos vinculamos con clientes y proveedores."
+      centrado
+    />
+
+    <ul class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+      {
+        valores.valores.map((v, i) => (
+          <li
+            class="revelar tarjeta flex flex-col p-6 hover:-translate-y-1 hover:shadow-lg"
+            style={`transition-delay:${i * 80}ms`}
+          >
+            <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
+              <Icon name={v.icono} class="h-5 w-5" />
+            </span>
+            <h3 class="mt-4 text-lg text-brand-ink">{v.nombre}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-brand-ink-soft">{v.detalle}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

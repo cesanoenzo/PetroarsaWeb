@@ -1,0 +1,26 @@
+/*
+  Tema institucional Petroarsa — verde profundo + naranja.
+  Tomado del degradé naranja→verde del banner de las gacetillas.
+  Es el tema por defecto: se aplica al :root para que cualquier página que no
+  declare data-theme quede con la identidad de Petroarsa.
+*/
+:root,
+[data-theme='petroarsa'] {
+  --brand-primary: #0e4d3a; /* Verde profundo */
+  --brand-primary-mid: #1a7a5a; /* Verde institucional */
+  --brand-accent: #ec7926; /* Naranja */
+  --brand-accent-light: #f9a861;
+  --brand-bg: #fafaf7;
+  --brand-bg-alt: #f1f0e9;
+  --brand-ink: #0c1f1a;
+  --brand-ink-soft: #4a5752;
+  --brand-line: #dedcd1;
+
+  /* Titulares editoriales en la home */
+  --font-display: 'Fraunces Variable', 'Fraunces';
+  --display-weight: 700;
+  --display-tracking: -0.02em;
+
+  /* Degradé firma de la marca (naranja → verde), igual que las gacetillas */
+  --brand-gradient: linear-gradient(100deg, #ec7926 0%, #d98a2b 38%, #2f7d55 72%, #0e4d3a 100%);
+}

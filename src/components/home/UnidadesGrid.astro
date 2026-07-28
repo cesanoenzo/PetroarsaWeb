@@ -1,0 +1,59 @@
+---
+import { Icon } from 'astro-icon/components';
+import SectionTitle from '../shared/SectionTitle.astro';
+import unidades from '../../data/unidades.json';
+import { asset, ruta } from '../../lib/url';
+---
+
+<section id="unidades" class="contenedor scroll-mt-24 py-20 sm:py-24">
+  <SectionTitle
+    etiqueta="Qué hacemos"
+    titulo="Tres unidades, una sola forma de trabajar"
+    bajada="Cada unidad opera con la identidad y el respaldo técnico de su marca partner, y con el mismo estándar de servicio de Petroarsa."
+  />
+
+  <div class="mt-12 grid gap-6 lg:grid-cols-3">
+    {
+      unidades.map((u, i) => (
+        <a
+          href={ruta(`/${u.slug}/`)}
+          data-theme={u.tema}
+          class="revelar group relative flex flex-col overflow-hidden rounded-3xl border border-brand-line bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+          style={`transition-delay:${i * 100}ms`}
+        >
+          {/* Filete superior con el color del proveedor */}
+          <span class="h-1.5 w-full bg-brand-primary" />
+
+          <div class="relative aspect-[16/10] overflow-hidden bg-brand-bg-alt">
+            <img
+              src={asset(u.imagen)}
+              alt={u.nombre}
+              width="800"
+              height="500"
+              loading="lazy"
+              decoding="async"
+              class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+            />
+          </div>
+
+          <div class="flex flex-1 flex-col p-6">
+            <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-primary text-white">
+              <Icon name={u.iconoRef} class="h-5 w-5" />
+            </span>
+
+            <h3 class="mt-4 text-xl text-brand-ink">{u.nombre}</h3>
+            <p class="mt-2 flex-1 text-sm leading-relaxed text-brand-ink-soft">{u.resumen}</p>
+
+            <span class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand-primary">
+              Ver catálogo
+              <Icon
+                name="lucide:arrow-right"
+                class="h-4 w-4 transition-transform group-hover:translate-x-1"
+              />
+            </span>
+          </div>
+        </a>
+      ))
+    }
+  </div>
+</section>

@@ -1,0 +1,25 @@
+{
+  "nombre": "Petroarsa S.A.",
+  "razonSocial": "Petroarsa S.A.",
+  "fundacion": 1996,
+  "descripcionCorta": "Distribución mayorista YPF, estaciones de servicio y centro de servicios Bridgestone en Tucumán.",
+  "descripcionLarga": "Petroarsa S.A. inicia sus actividades en 1996 en la provincia de Tucumán con la distribución de Combustibles y Lubricantes YPF. Con el objetivo de ampliar la oferta de productos y soluciones para los distintos segmentos, fuimos incorporando nuevas distribuciones hasta cubrir hoy el negocio energético, agropecuario y automotor del NOA.",
+  "colaboradores": "+100",
+  "puntosDeVenta": 6,
+  "contacto": {
+    "email": "info@petroarsa.com.ar",
+    "emailRRHH": "rrhh@petroarsa.com.ar",
+    "telefono": "+54 381 000-0000",
+    "whatsapp": "5493810000000",
+    "direccionAdministrativa": "Av. Perón y Thames, Yerba Buena, Tucumán"
+  },
+  "redes": {
+    "instagram": null,
+    "facebook": null,
+    "linkedin": null
+  },
+  "formulario": {
+    "servicio": "web3forms",
+    "accessKey": "REEMPLAZAR-CON-TU-ACCESS-KEY-DE-WEB3FORMS"
+  }
+}

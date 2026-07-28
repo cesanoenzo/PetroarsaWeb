@@ -1,0 +1,105 @@
+---
+import { Icon } from 'astro-icon/components';
+import empresa from '../../data/empresa.json';
+import unidades from '../../data/unidades.json';
+import sucursales from '../../data/sucursales.json';
+import { asset, ruta } from '../../lib/url';
+
+const anio = new Date().getFullYear();
+const wa = `https://wa.me/${empresa.contacto.whatsapp}`;
+---
+
+<footer class="mt-24 bg-[#0c1f1a] text-white/80">
+  <div class="filete-marca h-1"></div>
+
+  <div class="contenedor grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-4">
+    <div class="lg:col-span-1">
+      <img
+        src={asset('/logo-petroarsa-blanco.svg')}
+        alt="Petroarsa S.A."
+        width="180"
+        height="39"
+        class="h-9 w-auto"
+      />
+      <p class="mt-4 max-w-xs text-sm leading-relaxed">
+        {empresa.descripcionCorta} Desde {empresa.fundacion} en Tucumán.
+      </p>
+      <p class="mt-4 text-xs uppercase tracking-widest text-white/45">
+        {empresa.colaboradores} colaboradores · {empresa.puntosDeVenta} puntos de venta
+      </p>
+    </div>
+
+    <div>
+      <h2 class="mb-4 text-xs font-bold uppercase tracking-widest text-white/50">
+        Unidades de negocio
+      </h2>
+      <ul class="space-y-2.5 text-sm">
+        {
+          unidades.map((u) => (
+            <li>
+              <a href={ruta(`/${u.slug}/`)} class="transition-colors hover:text-white">
+                {u.nombre}
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a href={ruta('/contacto/')} class="transition-colors hover:text-white">Contacto</a>
+        </li>
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="mb-4 text-xs font-bold uppercase tracking-widest text-white/50">
+        Puntos de venta
+      </h2>
+      <ul class="space-y-2.5 text-sm">
+        {
+          sucursales.map((s) => (
+            <li>
+              <span class="block font-medium text-white/90">{s.nombre}</span>
+              <span class="text-white/55">
+                {s.direccion} — {s.localidad}
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div>
+      <h2 class="mb-4 text-xs font-bold uppercase tracking-widest text-white/50">Contacto</h2>
+      <ul class="space-y-3 text-sm">
+        <li class="flex items-start gap-2.5">
+          <Icon name="lucide:mail" class="mt-0.5 h-4 w-4 shrink-0 opacity-60" />
+          <a href={`mailto:${empresa.contacto.email}`} class="hover:text-white">
+            {empresa.contacto.email}
+          </a>
+        </li>
+        <li class="flex items-start gap-2.5">
+          <Icon name="lucide:phone" class="mt-0.5 h-4 w-4 shrink-0 opacity-60" />
+          <a href={`tel:${empresa.contacto.telefono.replace(/\s/g, '')}`} class="hover:text-white">
+            {empresa.contacto.telefono}
+          </a>
+        </li>
+        <li class="flex items-start gap-2.5">
+          <Icon name="lucide:message-circle" class="mt-0.5 h-4 w-4 shrink-0 opacity-60" />
+          <a href={wa} target="_blank" rel="noopener" class="hover:text-white">WhatsApp</a>
+        </li>
+        <li class="flex items-start gap-2.5">
+          <Icon name="lucide:map-pin" class="mt-0.5 h-4 w-4 shrink-0 opacity-60" />
+          <span>{empresa.contacto.direccionAdministrativa}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="border-t border-white/10">
+    <div
+      class="contenedor flex flex-col gap-2 py-6 text-xs text-white/45 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p>© {anio} {empresa.razonSocial}. Todos los derechos reservados.</p>
+      <p>Tucumán, Argentina</p>
+    </div>
+  </div>
+</footer>

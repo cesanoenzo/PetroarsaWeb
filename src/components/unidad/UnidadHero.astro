@@ -1,0 +1,75 @@
+---
+import { Icon } from 'astro-icon/components';
+import { asset } from '../../lib/url';
+
+interface Props {
+  etiqueta: string;
+  titulo: string;
+  bajada: string;
+  imagen: string;
+  logoPartner?: string;
+  acciones?: { texto: string; href: string; externo?: boolean; primaria?: boolean }[];
+}
+
+const { etiqueta, titulo, bajada, imagen, logoPartner, acciones = [] } = Astro.props;
+---
+
+<section class="relative isolate overflow-hidden bg-brand-ink">
+  <img
+    src={asset(imagen)}
+    alt=""
+    aria-hidden="true"
+    width="1600"
+    height="900"
+    fetchpriority="high"
+    class="absolute inset-0 h-full w-full object-cover opacity-45"
+  />
+  <div class="absolute inset-0 bg-gradient-to-b from-black/55 via-black/70 to-black/90"></div>
+  <div class="filete-marca absolute inset-x-0 top-0 h-1.5"></div>
+
+  <div class="contenedor relative py-20 sm:py-28">
+    {
+      logoPartner && (
+        <img
+          src={asset(logoPartner)}
+          alt=""
+          aria-hidden="true"
+          width="180"
+          height="48"
+          class="mb-7 h-11 w-auto brightness-0 invert"
+        />
+      )
+    }
+
+    <p class="text-xs font-bold uppercase tracking-[0.22em] text-white/60">{etiqueta}</p>
+
+    <h1 class="mt-4 max-w-3xl text-4xl leading-[1.06] text-white sm:text-5xl lg:text-6xl">
+      {titulo}
+    </h1>
+
+    <p class="mt-5 max-w-2xl text-lg leading-relaxed text-white/75">{bajada}</p>
+
+    {
+      acciones.length > 0 && (
+        <div class="mt-9 flex flex-wrap gap-3">
+          {acciones.map((a) => (
+            <a
+              href={a.href}
+              target={a.externo ? '_blank' : undefined}
+              rel={a.externo ? 'noopener' : undefined}
+              class:list={[
+                a.primaria ? 'btn-claro' : 'btn border border-white/40 text-white hover:bg-white/10',
+              ]}
+            >
+              {a.texto}
+              <Icon
+                name={a.externo ? 'lucide:external-link' : 'lucide:arrow-right'}
+                class="h-4 w-4"
+              />
+            </a>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</section>

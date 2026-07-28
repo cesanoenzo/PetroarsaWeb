@@ -1,0 +1,40 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import UnidadHeader from '../components/layout/UnidadHeader.astro';
+import type { Tema } from '../lib/temas';
+import unidades from '../data/unidades.json';
+import type { UnidadId } from '../lib/catalogo';
+import { ruta } from '../lib/url';
+
+interface Props {
+  unidad: UnidadId;
+  titulo: string;
+  descripcion: string;
+  imagenOG?: string;
+  /** Migas extra (ej. el nombre del producto en el detalle). */
+  migas?: { texto: string; href?: string }[];
+}
+
+const { unidad, titulo, descripcion, imagenOG, migas = [] } = Astro.props;
+
+// El tema sale de unidades.json: cambiar ahí el `tema` cambia toda la paleta
+// de la sección, porque BaseLayout lo escribe como data-theme en el <html>.
+const info = unidades.find((u) => u.id === unidad)!;
+const tema = info.tema as Tema;
+
+const migasCompletas = [
+  { texto: info.nombre, href: ruta(`/${info.slug}/`) },
+  ...migas,
+];
+---
+
+<BaseLayout
+  titulo={titulo}
+  descripcion={descripcion}
+  tema={tema}
+  imagenOG={imagenOG ?? info.imagen}
+>
+  <slot name="hero" />
+  <UnidadHeader items={migasCompletas} />
+  <slot />
+</BaseLayout>

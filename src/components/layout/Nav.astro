@@ -1,0 +1,133 @@
+---
+import { Icon } from 'astro-icon/components';
+import unidades from '../../data/unidades.json';
+import { asset, ruta } from '../../lib/url';
+
+// Marcamos el link activo comparando el primer segmento de la URL actual.
+const pathname = Astro.url.pathname;
+const segmento = pathname.replace(import.meta.env.BASE_URL, '/').split('/').filter(Boolean)[0] ?? '';
+
+const links = [
+  ...unidades.map((u) => ({ href: ruta(`/${u.slug}/`), texto: u.nombre, id: u.slug })),
+  { href: ruta('/contacto/'), texto: 'Contacto', id: 'contacto' },
+];
+---
+
+<header class="sticky top-0 z-50 border-b border-brand-line/70 bg-brand-bg/85 backdrop-blur-md">
+  <div class="contenedor flex h-[4.5rem] items-center justify-between gap-4">
+    <a href={ruta('/')} class="flex shrink-0 items-center gap-2" aria-label="Petroarsa — Inicio">
+      <img
+        src={asset('/logo-petroarsa.svg')}
+        alt="Petroarsa S.A."
+        width="180"
+        height="39"
+        class="h-8 w-auto sm:h-9"
+      />
+    </a>
+
+    <!-- Navegación desktop -->
+    <nav aria-label="Principal" class="hidden lg:block">
+      <ul class="flex items-center gap-1">
+        {
+          links.map((l) => (
+            <li>
+              <a
+                href={l.href}
+                aria-current={segmento === l.id ? 'page' : undefined}
+                class:list={[
+                  'relative rounded-full px-4 py-2 text-sm font-medium transition-colors',
+                  segmento === l.id
+                    ? 'bg-brand-primary text-white'
+                    : 'text-brand-ink-soft hover:bg-brand-bg-alt hover:text-brand-ink',
+                ]}
+              >
+                {l.texto}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <!-- Botón hamburguesa (RF-02) -->
+    <button
+      type="button"
+      id="btn-menu"
+      class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-brand-line text-brand-ink lg:hidden"
+      aria-label="Abrir menú"
+      aria-expanded="false"
+      aria-controls="menu-mobile"
+    >
+      <Icon name="lucide:menu" class="h-5 w-5" data-icono-abrir />
+      <Icon name="lucide:x" class="hidden h-5 w-5" data-icono-cerrar />
+    </button>
+  </div>
+
+  <!-- Menú mobile -->
+  <nav
+    id="menu-mobile"
+    aria-label="Principal (mobile)"
+    class="hidden border-t border-brand-line bg-brand-bg lg:hidden"
+  >
+    <ul class="contenedor flex flex-col py-3">
+      {
+        links.map((l) => (
+          <li>
+            <a
+              href={l.href}
+              aria-current={segmento === l.id ? 'page' : undefined}
+              class:list={[
+                'flex items-center justify-between rounded-xl px-3 py-3.5 text-base font-medium',
+                segmento === l.id ? 'text-brand-primary' : 'text-brand-ink',
+              ]}
+            >
+              {l.texto}
+              <Icon name="lucide:arrow-right" class="h-4 w-4 opacity-40" />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>
+
+<script>
+  // Con View Transitions el <body> se reemplaza en cada navegación, así que hay
+  // que volver a enganchar los listeners en cada astro:page-load.
+  function initMenu() {
+    const boton = document.getElementById('btn-menu');
+    const menu = document.getElementById('menu-mobile');
+    if (!boton || !menu || boton.dataset.listo === 'si') return;
+    boton.dataset.listo = 'si';
+
+    const iconoAbrir = boton.querySelector<HTMLElement>('[data-icono-abrir]');
+    const iconoCerrar = boton.querySelector<HTMLElement>('[data-icono-cerrar]');
+
+    const alternar = (abrir: boolean) => {
+      menu.classList.toggle('hidden', !abrir);
+      boton.setAttribute('aria-expanded', String(abrir));
+      boton.setAttribute('aria-label', abrir ? 'Cerrar menú' : 'Abrir menú');
+      iconoAbrir?.classList.toggle('hidden', abrir);
+      iconoCerrar?.classList.toggle('hidden', !abrir);
+    };
+
+    boton.addEventListener('click', () => {
+      alternar(menu.classList.contains('hidden'));
+    });
+
+    // Cerrar al navegar o al pasar a desktop
+    menu.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) alternar(false);
+    });
+    document.addEventListener('astro:before-swap', () => alternar(false));
+    window.matchMedia('(min-width: 1024px)').addEventListener('change', (e) => {
+      if (e.matches) alternar(false);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !menu.classList.contains('hidden')) alternar(false);
+    });
+  }
+
+  initMenu();
+  document.addEventListener('astro:page-load', initMenu);
+</script>

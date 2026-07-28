@@ -1,0 +1,49 @@
+---
+import ProductCard from './ProductCard.astro';
+import type { Producto, UnidadId } from '../../lib/catalogo';
+
+interface Props {
+  productos: Producto[];
+  unidad: UnidadId;
+  /** Debe coincidir con el `objetivo` del ProductFilter que lo controla. */
+  id?: string;
+  columnas?: 3 | 4;
+}
+
+const { productos, unidad, id = 'catalogo', columnas = 4 } = Astro.props;
+---
+
+<div
+  id={id}
+  data-grid-productos
+  class:list={[
+    'grid gap-5 sm:grid-cols-2 lg:grid-cols-3',
+    columnas === 4 && 'xl:grid-cols-4',
+  ]}
+>
+  {productos.map((p, i) => <ProductCard producto={p} unidad={unidad} indice={i} />)}
+</div>
+
+{
+  productos.length > 0 && (
+    <p
+      data-sin-resultados
+      hidden
+      class="rounded-2xl border border-dashed border-brand-line bg-brand-bg-alt px-6 py-14 text-center text-sm text-brand-ink-soft"
+    >
+      No encontramos productos con esos filtros. Probá con otra categoría o{' '}
+      <a href="#" data-limpiar-filtros class="font-semibold text-brand-primary underline">
+        limpiá la búsqueda
+      </a>
+      .
+    </p>
+  )
+}
+
+{
+  productos.length === 0 && (
+    <p class="rounded-2xl border border-dashed border-brand-line bg-brand-bg-alt px-6 py-14 text-center text-sm text-brand-ink-soft">
+      Todavía no cargamos productos en esta sección. Escribinos y te pasamos el listado completo.
+    </p>
+  )
+}

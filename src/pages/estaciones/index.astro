@@ -1,0 +1,185 @@
+---
+import { Icon } from 'astro-icon/components';
+import UnidadLayout from '../../layouts/UnidadLayout.astro';
+import UnidadHero from '../../components/unidad/UnidadHero.astro';
+import ProductFilter from '../../components/unidad/ProductFilter.astro';
+import ProductGrid from '../../components/unidad/ProductGrid.astro';
+import SectionTitle from '../../components/shared/SectionTitle.astro';
+import CTA from '../../components/shared/CTA.astro';
+import sucursales from '../../data/sucursales.json';
+import { productosDeUnidad, categoriasDe, marcasDe } from '../../lib/catalogo';
+import { asset } from '../../lib/url';
+
+const productos = await productosDeUnidad('estaciones');
+const categorias = categoriasDe(productos);
+const marcas = marcasDe(productos);
+
+const estaciones = sucursales.filter((s) => s.unidad === 'estaciones');
+
+const adicionales = [
+  { titulo: 'Tienda Full', detalle: 'Kiosco, bebidas frías, snacks y lo que necesites a cualquier hora.', icono: 'lucide:shopping-basket' },
+  { titulo: 'Café', detalle: 'Espacio de café y mesas para parar tranquilo.', icono: 'lucide:coffee' },
+  { titulo: 'Lubricentro', detalle: 'Cambio de aceite y filtros con productos Elaion.', icono: 'lucide:droplets' },
+  { titulo: 'Aire y agua', detalle: 'Control de presión y servicios de playa.', icono: 'lucide:gauge' },
+];
+
+const mapsUrl = (s: (typeof sucursales)[number]) =>
+  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+    `${s.direccion}, ${s.localidad}`
+  )}`;
+---
+
+<UnidadLayout
+  unidad="estaciones"
+  titulo="Estaciones de Servicio YPF en Yerba Buena"
+  descripcion="Dos estaciones de servicio YPF propias en Yerba Buena, Tucumán: combustibles Infinia y Súper, tienda Full, lubricentro y café. Abiertas las 24 horas."
+>
+  <UnidadHero
+    slot="hero"
+    etiqueta="Unidad de negocio"
+    titulo="Estaciones de Servicio YPF Yerba Buena"
+    bajada="Dos estaciones propias sobre Av. Perón y Av. Solano Vera, con la línea completa de combustibles YPF, tienda Full, lubricentro y café."
+    imagen="/imagenes/sucursales/ypf-solano.jpg"
+    logoPartner="/logos-partners/ypf.svg"
+    acciones={[
+      { texto: 'Ver las estaciones', href: '#estaciones', primaria: true },
+      { texto: 'Combustibles', href: '#catalogo-seccion' },
+    ]}
+  />
+
+  <!-- Sobre las estaciones -->
+  <section class="contenedor py-16 sm:py-20">
+    <SectionTitle
+      etiqueta="Sobre las estaciones"
+      titulo="Abiertas las 24 horas, todos los días"
+      bajada="En 2017 abrimos nuestra primera estación sobre Av. Perón y en 2025 sumamos la de Av. Solano Vera. Las dos operan bajo el manual de operaciones de YPF, con auditorías periódicas de seguridad y medio ambiente."
+    />
+  </section>
+
+  <!-- Cards de las 2 estaciones -->
+  <section id="estaciones" class="bg-brand-bg-alt py-16 scroll-mt-24 sm:py-20">
+    <div class="contenedor grid gap-6 md:grid-cols-2">
+      {
+        estaciones.map((s, i) => (
+          <article
+            class="revelar tarjeta overflow-hidden"
+            style={`transition-delay:${i * 90}ms`}
+          >
+            <div class="aspect-[16/10] overflow-hidden bg-white">
+              <img
+                src={asset(s.imagen)}
+                alt={`Estación de servicio ${s.nombre}`}
+                width="900"
+                height="560"
+                loading="lazy"
+                decoding="async"
+                class="h-full w-full object-cover"
+              />
+            </div>
+
+            <div class="p-6">
+              <div class="flex items-start justify-between gap-3">
+                <h2 class="text-2xl text-brand-ink">{s.nombre}</h2>
+                {s.desde && (
+                  <span class="etiqueta shrink-0">Desde {s.desde}</span>
+                )}
+              </div>
+
+              <ul class="mt-4 space-y-2 text-sm text-brand-ink-soft">
+                <li class="flex items-start gap-2.5">
+                  <Icon name="lucide:map-pin" class="mt-0.5 h-4 w-4 shrink-0 opacity-60" />
+                  <span>
+                    {s.direccion} — {s.localidad}
+                  </span>
+                </li>
+                <li class="flex items-start gap-2.5">
+                  <Icon name="lucide:clock" class="mt-0.5 h-4 w-4 shrink-0 opacity-60" />
+                  <span>{s.horarios}</span>
+                </li>
+              </ul>
+
+              <ul class="mt-4 flex flex-wrap gap-1.5">
+                {s.servicios.map((serv) => (
+                  <li class="etiqueta normal-case">{serv}</li>
+                ))}
+              </ul>
+
+              <a
+                href={mapsUrl(s)}
+                target="_blank"
+                rel="noopener"
+                class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-primary hover:underline"
+              >
+                Cómo llegar
+                <Icon name="lucide:external-link" class="h-3.5 w-3.5" />
+              </a>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Combustibles disponibles -->
+  <section id="catalogo-seccion" class="contenedor scroll-mt-24 py-16 sm:py-20">
+    <SectionTitle
+      etiqueta="En playa"
+      titulo="Combustibles y servicios"
+      bajada="La línea completa de combustibles YPF y los servicios que ofrecemos en cada estación."
+    />
+
+    <div class="mt-8 space-y-6">
+      <ProductFilter
+        categorias={categorias}
+        marcas={marcas}
+        objetivo="catalogo-estaciones"
+        conBuscador={false}
+      />
+      <ProductGrid productos={productos} unidad="estaciones" id="catalogo-estaciones" columnas={3} />
+    </div>
+  </section>
+
+  <!-- Servicios adicionales -->
+  <section class="bg-brand-bg-alt py-16 sm:py-20">
+    <div class="contenedor">
+      <SectionTitle etiqueta="Además" titulo="Servicios adicionales" centrado />
+
+      <ul class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          adicionales.map((a, i) => (
+            <li class="revelar tarjeta p-6" style={`transition-delay:${i * 80}ms`}>
+              <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
+                <Icon name={a.icono} class="h-5 w-5" />
+              </span>
+              <h3 class="mt-4 text-lg text-brand-ink">{a.titulo}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-brand-ink-soft">{a.detalle}</p>
+            </li>
+          ))
+        }
+      </ul>
+
+      <!-- Serviclub -->
+      <div class="revelar mt-10 flex flex-col items-start gap-6 rounded-3xl bg-brand-primary p-8 sm:flex-row sm:items-center">
+        <span
+          class="inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-brand-accent text-brand-primary"
+        >
+          <Icon name="lucide:star" class="h-6 w-6" />
+        </span>
+        <div>
+          <h3 class="text-xl text-white">YPF Serviclub</h3>
+          <p class="mt-2 text-sm leading-relaxed text-white/75">
+            Sumá puntos por cada carga en nuestras estaciones y canjealos por combustible,
+            productos de la tienda y beneficios de la red YPF.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <CTA
+    titulo="¿Tenés flota?"
+    bajada="Consultanos por cuentas corrientes, YPF En Ruta y condiciones para empresas."
+    unidad="estaciones"
+    textoBoton="Hablar con un asesor"
+  />
+</UnidadLayout>

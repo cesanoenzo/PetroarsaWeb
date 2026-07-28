@@ -1,0 +1,24 @@
+/*
+  Tema VARTA — azul oscuro + amarillo.
+  Es un SUB-TEMA: se aplica a un bloque dentro de la página de YPF Agro
+  (<section data-theme="varta">), no a un <body> entero. Como las variables se
+  heredan por el árbol del DOM, con poner data-theme en la sección alcanza para
+  que todo lo de adentro cambie de paleta.
+*/
+[data-theme='varta'] {
+  --brand-primary: #002f5f; /* Azul VARTA */
+  --brand-primary-mid: #003d7a;
+  --brand-accent: #fdb813; /* Amarillo VARTA */
+  --brand-accent-light: #ffcc00;
+  --brand-bg: #ffffff;
+  --brand-bg-alt: #eef2f7;
+  --brand-ink: #0a1929;
+  --brand-ink-soft: #445566;
+  --brand-line: #d3dbe5;
+
+  --font-display: 'Archivo Variable', 'Archivo';
+  --display-weight: 700;
+  --display-tracking: -0.025em;
+
+  --brand-gradient: linear-gradient(100deg, #002f5f 0%, #003d7a 60%, #fdb813 100%);
+}

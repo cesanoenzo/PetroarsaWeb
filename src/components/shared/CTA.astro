@@ -1,0 +1,55 @@
+---
+import { Icon } from 'astro-icon/components';
+import empresa from '../../data/empresa.json';
+import { ruta } from '../../lib/url';
+
+interface Props {
+  titulo?: string;
+  bajada?: string;
+  /** Se pasa como ?unidad=... para preseleccionar el select del formulario (RF-08). */
+  unidad?: string;
+  textoBoton?: string;
+}
+
+const {
+  titulo = '¿Hablamos?',
+  bajada = 'Contanos qué necesitás y un asesor de la unidad correspondiente se pone en contacto.',
+  unidad,
+  textoBoton = 'Escribinos',
+} = Astro.props;
+
+const hrefContacto = unidad ? ruta(`/contacto/?unidad=${unidad}`) : ruta('/contacto/');
+const wa = `https://wa.me/${empresa.contacto.whatsapp}?text=${encodeURIComponent(
+  unidad ? `Hola Petroarsa, consulto por ${unidad}.` : 'Hola Petroarsa, quería hacer una consulta.'
+)}`;
+---
+
+<section class="contenedor py-16 sm:py-20">
+  <div
+    class="revelar relative overflow-hidden rounded-3xl px-6 py-14 text-center sm:px-12"
+    style="background: var(--brand-gradient)"
+  >
+    <div class="absolute inset-0 bg-black/10"></div>
+
+    <div class="relative mx-auto max-w-2xl">
+      <h2 class="text-3xl text-white sm:text-4xl">{titulo}</h2>
+      <p class="mx-auto mt-4 max-w-xl text-white/85">{bajada}</p>
+
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+        <a href={hrefContacto} class="btn-claro">
+          {textoBoton}
+          <Icon name="lucide:arrow-right" class="h-4 w-4" />
+        </a>
+        <a
+          href={wa}
+          target="_blank"
+          rel="noopener"
+          class="btn border border-white/40 text-white hover:bg-white/10"
+        >
+          <Icon name="lucide:message-circle" class="h-4 w-4" />
+          WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

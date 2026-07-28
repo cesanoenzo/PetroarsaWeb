@@ -1,0 +1,56 @@
+---
+interface Props {
+  etiqueta?: string;
+  titulo: string;
+  bajada?: string;
+  centrado?: boolean;
+  /** Nivel de encabezado real, para no romper la jerarquía de la página. */
+  nivel?: 2 | 3;
+  claro?: boolean;
+}
+
+const { etiqueta, titulo, bajada, centrado = false, nivel = 2, claro = false } = Astro.props;
+const Encabezado = `h${nivel}` as 'h2' | 'h3';
+---
+
+<div
+  class:list={[
+    'revelar max-w-3xl',
+    centrado && 'mx-auto text-center',
+  ]}
+>
+  {
+    etiqueta && (
+      <p
+        class:list={[
+          'mb-3 text-xs font-bold uppercase tracking-[0.18em]',
+          claro ? 'text-white/70' : 'text-brand-accent',
+        ]}
+      >
+        {etiqueta}
+      </p>
+    )
+  }
+
+  <Encabezado
+    class:list={[
+      'text-3xl leading-[1.1] sm:text-4xl lg:text-[2.75rem]',
+      claro ? 'text-white' : 'text-brand-ink',
+    ]}
+  >
+    {titulo}
+  </Encabezado>
+
+  {
+    bajada && (
+      <p
+        class:list={[
+          'mt-4 text-base leading-relaxed sm:text-lg',
+          claro ? 'text-white/75' : 'text-brand-ink-soft',
+        ]}
+      >
+        {bajada}
+      </p>
+    )
+  }
+</div>

@@ -1,0 +1,37 @@
+---
+import { Icon } from 'astro-icon/components';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import unidades from '../data/unidades.json';
+import { ruta } from '../lib/url';
+---
+
+<BaseLayout
+  titulo="Página no encontrada"
+  descripcion="La página que buscás no existe o cambió de dirección."
+  noindex
+>
+  <section class="contenedor flex min-h-[60vh] flex-col items-center justify-center py-24 text-center">
+    <p class="font-display text-7xl font-bold text-brand-primary sm:text-8xl">404</p>
+
+    <h1 class="mt-6 text-3xl text-brand-ink sm:text-4xl">Esta página no existe</h1>
+
+    <p class="mt-4 max-w-md text-brand-ink-soft">
+      Puede que el link esté viejo o que hayamos movido el contenido. Probá desde alguna de estas
+      secciones.
+    </p>
+
+    <div class="mt-9 flex flex-wrap justify-center gap-3">
+      <a href={ruta('/')} class="btn-primario">
+        <Icon name="lucide:home" class="h-4 w-4" />
+        Ir al inicio
+      </a>
+      {
+        unidades.map((u) => (
+          <a href={ruta(`/${u.slug}/`)} class="btn-fantasma">
+            {u.nombre}
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>

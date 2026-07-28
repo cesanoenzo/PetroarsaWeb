@@ -1,0 +1,8 @@
+<!-- PLACEHOLDER con los colores oficiales YPF (azul #003480 / amarillo #FEC000).
+     Reemplazar por el SVG oficial provisto por YPF. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 48" role="img" aria-label="YPF">
+  <rect x="4" y="8" width="112" height="32" rx="4" fill="#003480"/>
+  <text x="60" y="32" text-anchor="middle" fill="#FEC000"
+        font-family="Archivo Variable, Archivo, Helvetica, Arial, sans-serif"
+        font-size="20" font-weight="800" letter-spacing="3">YPF</text>
+</svg>

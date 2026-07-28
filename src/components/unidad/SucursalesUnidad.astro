@@ -1,0 +1,89 @@
+---
+import { Icon } from 'astro-icon/components';
+import SectionTitle from '../shared/SectionTitle.astro';
+import sucursales from '../../data/sucursales.json';
+import { asset } from '../../lib/url';
+
+interface Props {
+  unidad: string;
+  titulo?: string;
+  bajada?: string;
+}
+
+const { unidad, titulo = 'Dónde atendemos', bajada } = Astro.props;
+const propias = sucursales.filter((s) => s.unidad === unidad);
+
+const mapsUrl = (s: (typeof sucursales)[number]) =>
+  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+    `${s.direccion}, ${s.localidad}`
+  )}`;
+---
+
+<section id="sucursales" class="bg-brand-bg-alt py-20 scroll-mt-24 sm:py-24">
+  <div class="contenedor">
+    <SectionTitle etiqueta="Puntos de venta" titulo={titulo} bajada={bajada} />
+
+    <div class="mt-10 grid gap-6 md:grid-cols-2">
+      {
+        propias.map((s, i) => (
+          <article
+            class="revelar tarjeta overflow-hidden"
+            style={`transition-delay:${i * 90}ms`}
+          >
+            <div class="aspect-[16/9] overflow-hidden bg-white">
+              <img
+                src={asset(s.imagen)}
+                alt={`Instalaciones de ${s.nombre}`}
+                width="800"
+                height="450"
+                loading="lazy"
+                decoding="async"
+                class="h-full w-full object-cover"
+              />
+            </div>
+
+            <div class="p-6">
+              <p class="text-[0.7rem] font-bold uppercase tracking-widest text-brand-primary">
+                {s.tipo}
+              </p>
+              <h3 class="mt-1.5 text-xl text-brand-ink">{s.nombre}</h3>
+
+              <ul class="mt-4 space-y-2 text-sm text-brand-ink-soft">
+                <li class="flex items-start gap-2.5">
+                  <Icon name="lucide:map-pin" class="mt-0.5 h-4 w-4 shrink-0 opacity-60" />
+                  <span>
+                    {s.direccion} — {s.localidad}
+                  </span>
+                </li>
+                {s.horarios && (
+                  <li class="flex items-start gap-2.5">
+                    <Icon name="lucide:clock" class="mt-0.5 h-4 w-4 shrink-0 opacity-60" />
+                    <span>{s.horarios}</span>
+                  </li>
+                )}
+              </ul>
+
+              {s.servicios?.length > 0 && (
+                <ul class="mt-4 flex flex-wrap gap-1.5">
+                  {s.servicios.map((serv) => (
+                    <li class="etiqueta normal-case">{serv}</li>
+                  ))}
+                </ul>
+              )}
+
+              <a
+                href={mapsUrl(s)}
+                target="_blank"
+                rel="noopener"
+                class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-primary hover:underline"
+              >
+                Cómo llegar
+                <Icon name="lucide:external-link" class="h-3.5 w-3.5" />
+              </a>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

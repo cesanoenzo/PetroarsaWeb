@@ -1,0 +1,77 @@
+---
+import { Icon } from 'astro-icon/components';
+import SectionTitle from '../shared/SectionTitle.astro';
+import sucursales from '../../data/sucursales.json';
+import { asset } from '../../lib/url';
+
+// Mapa embebido (RF-10): sin API key, apunta a la zona de operación.
+// Cuando estén las coordenadas exactas de cada sucursal se puede reemplazar
+// por un mapa con marcadores (Google My Maps embebido, por ejemplo).
+const mapaSrc =
+  'https://www.google.com/maps?q=San%20Miguel%20de%20Tucum%C3%A1n%2C%20Tucum%C3%A1n%2C%20Argentina&z=10&output=embed';
+---
+
+<section id="sucursales" class="bg-brand-bg-alt py-20 scroll-mt-24 sm:py-24">
+  <div class="contenedor">
+    <SectionTitle
+      etiqueta="Dónde estamos"
+      titulo="Seis puntos de venta en Tucumán"
+      bajada="Estaciones de servicio, plantas de distribución mayorista y centros de servicio técnico."
+    />
+
+    <div class="mt-12 grid gap-6 lg:grid-cols-[1.15fr_1fr]">
+      <ul class="grid gap-5 sm:grid-cols-2">
+        {
+          sucursales.map((s, i) => (
+            <li
+              class="revelar tarjeta overflow-hidden hover:-translate-y-1 hover:shadow-lg"
+              style={`transition-delay:${(i % 4) * 80}ms`}
+            >
+              <div class="aspect-[16/9] overflow-hidden bg-brand-bg-alt">
+                <img
+                  src={asset(s.imagen)}
+                  alt={`Punto de venta ${s.nombre}`}
+                  width="640"
+                  height="360"
+                  loading="lazy"
+                  decoding="async"
+                  class="h-full w-full object-cover"
+                />
+              </div>
+
+              <div class="p-5">
+                <p class="text-[0.7rem] font-bold uppercase tracking-widest text-brand-accent">
+                  {s.tipo}
+                </p>
+                <h3 class="mt-1.5 text-base text-brand-ink">{s.nombre}</h3>
+
+                <p class="mt-2 flex items-start gap-2 text-sm text-brand-ink-soft">
+                  <Icon name="lucide:map-pin" class="mt-0.5 h-4 w-4 shrink-0 opacity-60" />
+                  <span>
+                    {s.direccion} — {s.localidad}
+                  </span>
+                </p>
+
+                {s.horarios && (
+                  <p class="mt-1.5 flex items-start gap-2 text-sm text-brand-ink-soft">
+                    <Icon name="lucide:clock" class="mt-0.5 h-4 w-4 shrink-0 opacity-60" />
+                    <span>{s.horarios}</span>
+                  </p>
+                )}
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="revelar overflow-hidden rounded-2xl border border-brand-line bg-white">
+        <iframe
+          title="Mapa de la zona de operación de Petroarsa en Tucumán"
+          src={mapaSrc}
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          class="h-[26rem] w-full lg:h-full lg:min-h-[32rem]"></iframe>
+      </div>
+    </div>
+  </div>
+</section>

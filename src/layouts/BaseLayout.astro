@@ -1,0 +1,142 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+import '@fontsource-variable/fraunces';
+import '@fontsource-variable/archivo';
+import '../styles/global.css';
+
+import Nav from '../components/layout/Nav.astro';
+import Footer from '../components/layout/Footer.astro';
+import empresa from '../data/empresa.json';
+import sucursales from '../data/sucursales.json';
+import { asset } from '../lib/url';
+import type { Tema } from '../lib/temas';
+
+interface Props {
+  titulo: string;
+  descripcion: string;
+  /** Define la paleta de TODO el documento (ver src/styles/themes/*.css). */
+  tema?: Tema;
+  /** Imagen para Open Graph, ruta dentro de public/. */
+  imagenOG?: string;
+  noindex?: boolean;
+}
+
+const {
+  titulo,
+  descripcion,
+  tema = 'petroarsa',
+  imagenOG = '/imagenes/hero/hero-petroarsa.jpg',
+  noindex = false,
+} = Astro.props;
+
+const tituloCompleto = titulo.includes('Petroarsa') ? titulo : `${titulo} | Petroarsa S.A.`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogAbsoluta = new URL(asset(imagenOG), Astro.site);
+
+// schema.org: Organization + LocalBusiness por cada punto de venta (RNF SEO).
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: empresa.nombre,
+  url: Astro.site?.toString(),
+  logo: new URL(asset('/logo-petroarsa.svg'), Astro.site).toString(),
+  description: empresa.descripcionCorta,
+  foundingDate: String(empresa.fundacion),
+  email: empresa.contacto.email,
+  areaServed: 'Tucumán, Argentina',
+  department: sucursales.map((s) => ({
+    '@type': 'LocalBusiness',
+    name: `Petroarsa — ${s.nombre}`,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: s.direccion,
+      addressLocality: s.localidad,
+      addressRegion: 'Tucumán',
+      addressCountry: 'AR',
+    },
+    openingHours: s.horarios,
+  })),
+};
+---
+
+<!doctype html>
+<html lang="es-AR" data-theme={tema}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href={asset('/favicon.svg')} />
+    <link rel="canonical" href={canonical} />
+
+    <title>{tituloCompleto}</title>
+    <meta name="description" content={descripcion} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Petroarsa S.A." />
+    <meta property="og:title" content={tituloCompleto} />
+    <meta property="og:description" content={descripcion} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogAbsoluta} />
+    <meta property="og:locale" content="es_AR" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta name="theme-color" content="#0e4d3a" />
+
+    <!-- Transiciones suaves entre páginas (RF-01) -->
+    <ViewTransitions />
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+
+  <body>
+    <a
+      href="#contenido"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-brand-primary focus:px-5 focus:py-3 focus:text-sm focus:font-semibold focus:text-white"
+    >
+      Saltar al contenido
+    </a>
+
+    <Nav />
+
+    <main id="contenido">
+      <slot />
+    </main>
+
+    <Footer />
+
+    <!-- Reveal on scroll (RF-12). Se re-ejecuta en cada navegación con View Transitions. -->
+    <script>
+      function activarReveals() {
+        const elementos = document.querySelectorAll<HTMLElement>('.revelar:not(.visible)');
+        if (!elementos.length) return;
+
+        const prefiereMenosMovimiento = window.matchMedia(
+          '(prefers-reduced-motion: reduce)'
+        ).matches;
+
+        if (prefiereMenosMovimiento || !('IntersectionObserver' in window)) {
+          elementos.forEach((el) => el.classList.add('visible'));
+          return;
+        }
+
+        const observer = new IntersectionObserver(
+          (entradas) => {
+            entradas.forEach((entrada) => {
+              if (entrada.isIntersecting) {
+                entrada.target.classList.add('visible');
+                observer.unobserve(entrada.target);
+              }
+            });
+          },
+          { rootMargin: '0px 0px -10% 0px', threshold: 0.08 }
+        );
+
+        elementos.forEach((el) => observer.observe(el));
+      }
+
+      activarReveals();
+      document.addEventListener('astro:page-load', activarReveals);
+    </script>
+  </body>
+</html>

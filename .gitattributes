@@ -1,0 +1,10 @@
+# Normaliza los finales de línea: LF en el repo, nativo al hacer checkout.
+* text=auto eol=lf
+
+# Binarios: que git no los toque
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.webp binary
+*.pdf binary
+*.ico binary

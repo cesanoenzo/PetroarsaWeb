@@ -1,0 +1,30 @@
+---
+import HomeLayout from '../layouts/HomeLayout.astro';
+import Hero from '../components/home/Hero.astro';
+import UnidadesGrid from '../components/home/UnidadesGrid.astro';
+import MarcasStrip from '../components/home/MarcasStrip.astro';
+import Nosotros from '../components/home/Nosotros.astro';
+import Valores from '../components/home/Valores.astro';
+import Timeline from '../components/home/Timeline.astro';
+import Sucursales from '../components/home/Sucursales.astro';
+import Compromiso from '../components/home/Compromiso.astro';
+import CTA from '../components/shared/CTA.astro';
+---
+
+<HomeLayout
+  titulo="Petroarsa S.A. — Distribución YPF, Bridgestone y estaciones de servicio en Tucumán"
+  descripcion="Empresa tucumana con casi 30 años en distribución mayorista YPF, estaciones de servicio propias y centro de servicios Bridgestone. Combustibles, lubricantes, agroinsumos, neumáticos y baterías."
+>
+  <Hero />
+  <UnidadesGrid />
+  <MarcasStrip />
+  <Nosotros />
+  <Valores />
+  <Timeline />
+  <Sucursales />
+  <Compromiso />
+  <CTA
+    titulo="Trabajemos juntos"
+    bajada="Contanos qué necesitás para tu campo, tu flota o tu empresa y te armamos una propuesta."
+  />
+</HomeLayout>

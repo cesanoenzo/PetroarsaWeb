@@ -1,0 +1,97 @@
+---
+import { Icon } from 'astro-icon/components';
+import type { Producto, UnidadId } from '../../lib/catalogo';
+import { normalizar, rutaProducto } from '../../lib/catalogo';
+import { asset, ruta } from '../../lib/url';
+
+interface Props {
+  producto: Producto;
+  unidad: UnidadId;
+  indice?: number;
+}
+
+const { producto, unidad, indice = 0 } = Astro.props;
+const p = producto.data;
+
+// Los data-* alimentan el filtro client-side de ProductFilter.astro.
+// Van normalizados (sin acentos, minúsculas) para comparar sin sorpresas.
+const datosBusqueda = normalizar(
+  [p.titulo, p.marca, p.categoria, p.subcategoria, p.descripcionCorta, ...(p.tags ?? []), ...(p.medidas ?? [])]
+    .filter(Boolean)
+    .join(' ')
+);
+---
+
+<article
+  class="revelar group flex flex-col overflow-hidden rounded-2xl border border-brand-line bg-white transition-all duration-300 hover:-translate-y-1 hover:border-brand-primary/40 hover:shadow-xl"
+  style={`transition-delay:${Math.min(indice, 8) * 60}ms`}
+  data-producto
+  data-categoria={normalizar(p.categoria)}
+  data-marca={normalizar(p.marca)}
+  data-busqueda={datosBusqueda}
+>
+  <a href={ruta(rutaProducto(unidad, producto))} class="flex flex-1 flex-col">
+    <div class="relative aspect-square overflow-hidden bg-brand-bg-alt">
+      <img
+        src={asset(p.imagenPrincipal)}
+        alt={p.titulo}
+        width="600"
+        height="600"
+        loading="lazy"
+        decoding="async"
+        class="h-full w-full object-contain p-4 transition-transform duration-500 group-hover:scale-105"
+      />
+
+      {
+        p.destacado && (
+          <span class="absolute left-3 top-3 rounded-full bg-brand-accent px-2.5 py-1 text-[0.65rem] font-bold uppercase tracking-wider text-white">
+            Destacado
+          </span>
+        )
+      }
+
+      {
+        p.fichaTecnica && (
+          <span
+            class="absolute right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-brand-primary shadow-sm"
+            title="Tiene ficha técnica descargable"
+          >
+            <Icon name="lucide:file-text" class="h-4 w-4" />
+            <span class="sr-only">Con ficha técnica</span>
+          </span>
+        )
+      }
+    </div>
+
+    <div class="flex flex-1 flex-col border-t border-brand-line p-5">
+      <p class="text-[0.7rem] font-bold uppercase tracking-widest text-brand-primary">
+        {p.marca} · {p.categoria}
+      </p>
+
+      <h3 class="mt-2 text-lg leading-snug text-brand-ink">{p.titulo}</h3>
+
+      <p class="mt-2 line-clamp-3 flex-1 text-sm leading-relaxed text-brand-ink-soft">
+        {p.descripcionCorta}
+      </p>
+
+      {
+        (p.medidas?.length || p.presentaciones?.length) && (
+          <p class="mt-3 text-xs text-brand-ink-soft">
+            <span class="font-semibold text-brand-ink">
+              {p.medidas?.length ? `${p.medidas.length} medidas` : `${p.presentaciones!.length} presentaciones`}
+            </span>{' '}
+            disponibles
+          </p>
+        )
+      }
+
+      <span class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-primary">
+        Ver detalle
+        <Icon
+          name="lucide:arrow-right"
+          class="h-4 w-4 transition-transform group-hover:translate-x-1"
+        />
+      </span>
+    </div>
+  </a>
+</article>

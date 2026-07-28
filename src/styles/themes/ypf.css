@@ -1,0 +1,22 @@
+/*
+  Tema YPF — azul + amarillo. Usado por YPF Agro y por Estaciones de Servicio.
+  El amarillo #FEC000 no llega a contraste AA sobre blanco: se usa sólo como
+  fondo (con texto azul oscuro encima) o como filete/acento, nunca como texto.
+*/
+[data-theme='ypf'] {
+  --brand-primary: #003480; /* Azul YPF */
+  --brand-primary-mid: #0050c8;
+  --brand-accent: #fec000; /* Amarillo YPF */
+  --brand-accent-light: #ffd54f;
+  --brand-bg: #ffffff;
+  --brand-bg-alt: #f2f5fa;
+  --brand-ink: #0d1a2e;
+  --brand-ink-soft: #4a5568;
+  --brand-line: #d9e0ec;
+
+  --font-display: 'Archivo Variable', 'Archivo';
+  --display-weight: 700;
+  --display-tracking: -0.025em;
+
+  --brand-gradient: linear-gradient(100deg, #003480 0%, #0050c8 62%, #fec000 100%);
+}

@@ -1,0 +1,204 @@
+﻿---
+import { Icon } from 'astro-icon/components';
+import { normalizar } from '../../lib/catalogo';
+
+interface Props {
+  categorias: string[];
+  marcas: string[];
+  /**
+   * id (o ids separados por coma) del/los ProductGrid que controla.
+   * YPF Agro pasa varios porque su catálogo está partido en familias.
+   */
+  objetivo?: string;
+  /** Mostrar el buscador de texto (RF-13). */
+  conBuscador?: boolean;
+}
+
+const { categorias, marcas, objetivo = 'catalogo', conBuscador = true } = Astro.props;
+
+// `objetivo` puede traer varios ids separados por coma; para los id/for de los
+// campos usamos sólo el primero, así quedan válidos como selector CSS.
+const uid = objetivo.split(',')[0].trim();
+---
+
+<div
+  class="revelar rounded-2xl border border-brand-line bg-brand-bg-alt p-4 sm:p-5"
+  data-filtros
+  data-objetivo={objetivo}
+>
+  <div class="flex flex-col gap-4 lg:flex-row lg:items-end">
+    {
+      conBuscador && (
+        <div class="flex flex-1 flex-col gap-1.5">
+          <label
+            for={`${uid}-q`}
+            class="text-xs font-bold uppercase tracking-wider text-brand-ink-soft"
+          >
+            Buscar
+          </label>
+          <div class="relative">
+            <Icon
+              name="lucide:search"
+              class="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-brand-ink-soft"
+            />
+            <input
+              id={`${uid}-q`}
+              type="search"
+              data-filtro-texto
+              placeholder="Producto, medida, uso…"
+              class="w-full rounded-xl border border-brand-line bg-white py-2.5 pl-10 pr-4 text-sm outline-none transition-colors focus:border-brand-primary"
+            />
+          </div>
+        </div>
+      )
+    }
+
+    <div class="flex flex-col gap-1.5 lg:w-56">
+      <label
+        for={`${uid}-cat`}
+        class="text-xs font-bold uppercase tracking-wider text-brand-ink-soft"
+      >
+        Categoría
+      </label>
+      <select
+        id={`${uid}-cat`}
+        data-filtro-categoria
+        class="rounded-xl border border-brand-line bg-white px-3.5 py-2.5 text-sm outline-none transition-colors focus:border-brand-primary"
+      >
+        <option value="">Todas</option>
+        {categorias.map((c) => <option value={normalizar(c)}>{c}</option>)}
+      </select>
+    </div>
+
+    {
+      marcas.length > 1 && (
+        <div class="flex flex-col gap-1.5 lg:w-44">
+          <label
+            for={`${uid}-marca`}
+            class="text-xs font-bold uppercase tracking-wider text-brand-ink-soft"
+          >
+            Marca
+          </label>
+          <select
+            id={`${uid}-marca`}
+            data-filtro-marca
+            class="rounded-xl border border-brand-line bg-white px-3.5 py-2.5 text-sm outline-none transition-colors focus:border-brand-primary"
+          >
+            <option value="">Todas</option>
+            {marcas.map((m) => (
+              <option value={normalizar(m)}>{m}</option>
+            ))}
+          </select>
+        </div>
+      )
+    }
+
+    <button type="button" data-limpiar-filtros class="btn-fantasma shrink-0 !py-2.5">
+      <Icon name="lucide:rotate-ccw" class="h-4 w-4" />
+      Limpiar
+    </button>
+  </div>
+
+  <p class="mt-3 text-xs text-brand-ink-soft" role="status" aria-live="polite" data-contador></p>
+</div>
+
+<script>
+  /**
+   * Filtro de catálogo 100% client-side (RF-05 / RF-13).
+   * No hay backend: se muestran/ocultan las tarjetas ya renderizadas comparando
+   * los data-* que escribe ProductCard.astro.
+   */
+  function initFiltros() {
+    document.querySelectorAll<HTMLElement>('[data-filtros]').forEach((panel) => {
+      if (panel.dataset.listo === 'si') return;
+      panel.dataset.listo = 'si';
+
+      const grids = (panel.dataset.objetivo ?? 'catalogo')
+        .split(',')
+        .map((id) => document.getElementById(id.trim()))
+        .filter((g): g is HTMLElement => g !== null);
+      if (!grids.length) return;
+
+      const tarjetas = grids.flatMap((g) =>
+        Array.from(g.querySelectorAll<HTMLElement>('[data-producto]'))
+      );
+      const contador = panel.querySelector<HTMLElement>('[data-contador]');
+
+      const inputTexto = panel.querySelector<HTMLInputElement>('[data-filtro-texto]');
+      const selCategoria = panel.querySelector<HTMLSelectElement>('[data-filtro-categoria]');
+      const selMarca = panel.querySelector<HTMLSelectElement>('[data-filtro-marca]');
+
+      const normalizar = (s: string) =>
+        s
+          .normalize('NFD')
+          .replace(/\p{Diacritic}/gu, '')
+          .toLowerCase()
+          .trim();
+
+      function aplicar() {
+        const texto = normalizar(inputTexto?.value ?? '');
+        const categoria = selCategoria?.value ?? '';
+        const marca = selMarca?.value ?? '';
+        const sinFiltros = !texto && !categoria && !marca;
+        let visibles = 0;
+
+        grids.forEach((grid) => {
+          let visiblesGrid = 0;
+
+          grid.querySelectorAll<HTMLElement>('[data-producto]').forEach((t) => {
+            const coincide =
+              (!categoria || t.dataset.categoria === categoria) &&
+              (!marca || t.dataset.marca === marca) &&
+              (!texto || (t.dataset.busqueda ?? '').includes(texto));
+
+            t.hidden = !coincide;
+            if (coincide) visiblesGrid++;
+          });
+
+          visibles += visiblesGrid;
+
+          // Cartel de "sin resultados" propio de cada grilla.
+          const vacio = grid.parentElement?.querySelector<HTMLElement>('[data-sin-resultados]');
+          if (vacio) vacio.hidden = visiblesGrid !== 0;
+
+          // Si la grilla vive dentro de un bloque de familia (YPF Agro), el
+          // bloque entero se esconde cuando no queda nada que mostrar.
+          const familia = grid.closest<HTMLElement>('[data-seccion-familia]');
+          if (familia) familia.hidden = visiblesGrid === 0 && !sinFiltros;
+        });
+
+        if (contador) {
+          contador.textContent =
+            visibles === tarjetas.length
+              ? `${tarjetas.length} producto${tarjetas.length === 1 ? '' : 's'}`
+              : `${visibles} de ${tarjetas.length} producto${tarjetas.length === 1 ? '' : 's'}`;
+        }
+      }
+
+      function limpiar(e?: Event) {
+        e?.preventDefault();
+        if (inputTexto) inputTexto.value = '';
+        if (selCategoria) selCategoria.value = '';
+        if (selMarca) selMarca.value = '';
+        aplicar();
+      }
+
+      inputTexto?.addEventListener('input', aplicar);
+      selCategoria?.addEventListener('change', aplicar);
+      selMarca?.addEventListener('change', aplicar);
+      panel
+        .querySelectorAll<HTMLElement>('[data-limpiar-filtros]')
+        .forEach((b) => b.addEventListener('click', limpiar));
+      grids.forEach((grid) => {
+        grid.parentElement
+          ?.querySelectorAll<HTMLElement>('[data-sin-resultados] [data-limpiar-filtros]')
+          .forEach((b) => b.addEventListener('click', limpiar));
+      });
+
+      aplicar();
+    });
+  }
+
+  initFiltros();
+  document.addEventListener('astro:page-load', initFiltros);
+</script>

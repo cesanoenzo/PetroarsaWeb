@@ -1,0 +1,10 @@
+<!-- Versión monocroma blanca del logo, para fondos oscuros (footer, heros). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 56" role="img" aria-label="Petroarsa S.A.">
+  <g fill="#ffffff">
+    <path d="M26 4c7.8 9.2 14 17.1 14 25.2C40 39.6 33.7 46 26 46S12 39.6 12 29.2C12 21.1 18.2 13.2 26 4Z"/>
+  </g>
+  <path d="M26 36.5c0-6 3.9-10.4 9.4-11.6-.5 6.5-4.2 10.8-9.4 11.6Z" fill="#0e4d3a" opacity=".45"/>
+  <text x="52" y="37" fill="#ffffff"
+        font-family="Archivo Variable, Archivo, Helvetica, Arial, sans-serif"
+        font-size="27" font-weight="800" letter-spacing="-0.6">PETROARSA</text>
+</svg>

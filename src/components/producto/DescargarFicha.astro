@@ -1,0 +1,27 @@
+---
+import { Icon } from 'astro-icon/components';
+import { asset } from '../../lib/url';
+
+interface Props {
+  ficha?: string;
+  titulo: string;
+}
+
+const { ficha, titulo } = Astro.props;
+---
+
+{
+  ficha ? (
+    <a href={asset(ficha)} download class="btn-primario w-full sm:w-auto">
+      <Icon name="lucide:download" class="h-4 w-4" />
+      Descargar ficha técnica
+    </a>
+  ) : (
+    <p class="flex items-center gap-2 rounded-xl border border-dashed border-brand-line bg-brand-bg-alt px-4 py-3 text-sm text-brand-ink-soft">
+      <Icon name="lucide:info" class="h-4 w-4 shrink-0 opacity-60" />
+      <span>
+        La ficha técnica de {titulo} todavía no está cargada. Escribinos y te la enviamos.
+      </span>
+    </p>
+  )
+}

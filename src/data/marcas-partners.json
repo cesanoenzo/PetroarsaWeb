@@ -1,0 +1,44 @@
+[
+  {
+    "id": "ypf",
+    "nombre": "YPF",
+    "logo": "/logos-partners/ypf.svg",
+    "desde": 1996,
+    "url": "https://www.ypf.com"
+  },
+  {
+    "id": "ypf-agro",
+    "nombre": "YPF Agro",
+    "logo": "/logos-partners/ypf-agro.svg",
+    "desde": 1999,
+    "url": "https://www.ypfagro.com.ar"
+  },
+  {
+    "id": "bridgestone",
+    "nombre": "Bridgestone",
+    "logo": "/logos-partners/bridgestone.svg",
+    "desde": 2009,
+    "url": "https://www.bridgestone.com.ar"
+  },
+  {
+    "id": "firestone",
+    "nombre": "Firestone",
+    "logo": "/logos-partners/firestone.svg",
+    "desde": 2009,
+    "url": "https://www.firestone.com.ar"
+  },
+  {
+    "id": "varta",
+    "nombre": "VARTA",
+    "logo": "/logos-partners/varta.svg",
+    "desde": 1998,
+    "url": "https://www.varta-automotive.com"
+  },
+  {
+    "id": "elaion",
+    "nombre": "Elaion",
+    "logo": "/logos-partners/elaion.svg",
+    "desde": 2004,
+    "url": "https://www.ypf.com/productosyservicios/paginas/elaion.aspx"
+  }
+]

@@ -1,0 +1,31 @@
+---
+import marcas from '../../data/marcas-partners.json';
+import { asset } from '../../lib/url';
+---
+
+<section class="border-y border-brand-line bg-brand-bg-alt py-12">
+  <div class="contenedor">
+    <p class="text-center text-xs font-bold uppercase tracking-[0.18em] text-brand-ink-soft">
+      Representamos a
+    </p>
+
+    <ul class="mt-8 flex flex-wrap items-center justify-center gap-x-10 gap-y-8 sm:gap-x-14">
+      {
+        marcas.map((m) => (
+          <li class="revelar">
+            <img
+              src={asset(m.logo)}
+              alt={m.nombre}
+              width="140"
+              height="48"
+              loading="lazy"
+              decoding="async"
+              class="h-9 w-auto opacity-70 grayscale transition-all duration-300 hover:opacity-100 hover:grayscale-0 sm:h-10"
+            />
+            <span class="sr-only">Desde {m.desde}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

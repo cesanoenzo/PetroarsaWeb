@@ -1,0 +1,35 @@
+[
+  {
+    "id": "bridgestone",
+    "nombre": "Centro de Servicios Bridgestone",
+    "slug": "bridgestone",
+    "tema": "bridgestone",
+    "resumen": "Neumáticos Bridgestone y Firestone para auto, camioneta, transporte, agrícolas, viales e industriales, con servicio técnico propio.",
+    "iconoRef": "lucide:circle-dot",
+    "colorAcento": "#E30613",
+    "imagen": "/imagenes/sucursales/cs-bridgestone-yerba-buena.jpg",
+    "desde": 2009
+  },
+  {
+    "id": "ypf-agro",
+    "nombre": "YPF Agro",
+    "slug": "ypf-agro",
+    "tema": "ypf",
+    "resumen": "Distribución mayorista YPF: combustibles, lubricantes, fertilizantes, agroquímicos, semillas, silobolsas y baterías VARTA.",
+    "iconoRef": "lucide:wheat",
+    "colorAcento": "#003480",
+    "imagen": "/imagenes/sucursales/ypf-agro-cevil-pozo.jpg",
+    "desde": 1996
+  },
+  {
+    "id": "estaciones",
+    "nombre": "Estaciones de Servicio YPF",
+    "slug": "estaciones",
+    "tema": "ypf",
+    "resumen": "Dos estaciones YPF en Yerba Buena con tienda Full, lubricentro, café y todos los servicios de playa.",
+    "iconoRef": "lucide:fuel",
+    "colorAcento": "#003480",
+    "imagen": "/imagenes/sucursales/ypf-solano.jpg",
+    "desde": 2017
+  }
+]

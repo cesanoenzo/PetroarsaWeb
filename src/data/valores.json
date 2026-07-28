@@ -1,0 +1,66 @@
+{
+  "vision": "Ser el proveedor estratégico preferido de nuestros clientes ofreciendo soluciones integrales para contribuir con su crecimiento.",
+  "mision": "Contribuir con el crecimiento integral de nuestros clientes, mediante innovación permanente de soluciones, alianzas con proveedores estratégicos, desarrollo del talento humano, y el compromiso ambiental.",
+  "valores": [
+    {
+      "nombre": "Respeto",
+      "icono": "lucide:handshake",
+      "detalle": "Reconocemos que las ideas y sentimientos de los demás son tan importantes como los propios."
+    },
+    {
+      "nombre": "Integridad",
+      "icono": "lucide:shield-check",
+      "detalle": "Actuamos de manera honesta, transparente y confiable."
+    },
+    {
+      "nombre": "Sinergia",
+      "icono": "lucide:users",
+      "detalle": "Combinamos habilidades, talentos e ideas para alcanzar un resultado superior."
+    },
+    {
+      "nombre": "Innovación",
+      "icono": "lucide:lightbulb",
+      "detalle": "Transformamos las ideas en valor para generar resultados superiores."
+    },
+    {
+      "nombre": "Agilidad",
+      "icono": "lucide:zap",
+      "detalle": "Adoptamos y lideramos los cambios de manera productiva."
+    }
+  ],
+  "competencias": [
+    "Apertura al aprendizaje",
+    "Sentido de pertenencia",
+    "Orientación al cliente",
+    "Enfoque en lo importante"
+  ],
+  "politicaCalidad": [
+    "Trabajar bajo el cumplimiento de las leyes, brindando un servicio ético y transparente.",
+    "Desempeñar profesionalmente todos los procesos, manteniendo foco en el cliente.",
+    "Mejorar continuamente el Sistema de Gestión de la Calidad.",
+    "Capacitar al personal e incorporar tecnología.",
+    "Maximizar la capacidad de cambio."
+  ],
+  "compromiso": [
+    {
+      "titulo": "Seguridad de las personas",
+      "icono": "lucide:hard-hat",
+      "detalle": "Matriz legal de Higiene, Seguridad y Medio Ambiente, asesor externo con visitas frecuentes, plan anual de capacitaciones (control de incendio, evacuación, primeros auxilios, ergonomía, seguridad vial) y auditorías externas de YPF y la Superintendencia de Riesgos del Trabajo."
+    },
+    {
+      "titulo": "Cuidado del medio ambiente",
+      "icono": "lucide:leaf",
+      "detalle": "Disposición final de residuos con empresas habilitadas por la Dirección de Medio Ambiente, redes de contención y cámaras de recuperación en todas las plantas que almacenan líquidos, y capacitación en manejo de agroquímicos y contención de derrames."
+    },
+    {
+      "titulo": "Compromiso con la comunidad",
+      "icono": "lucide:heart-handshake",
+      "detalle": "Aportes de bienes y acciones de apoyo a la comunidad cercana, además de la promoción del cuidado de recursos puertas adentro."
+    },
+    {
+      "titulo": "Sistema de Gestión de Calidad",
+      "icono": "lucide:badge-check",
+      "detalle": "Formas de trabajo, responsabilidades y recursos definidos, con tratamiento sistemático de no conformidades: acción preventiva, corrección inmediata y acción correctiva de mejora."
+    }
+  ]
+}

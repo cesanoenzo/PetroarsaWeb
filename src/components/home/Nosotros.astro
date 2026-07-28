@@ -1,0 +1,61 @@
+---
+import { Icon } from 'astro-icon/components';
+import SectionTitle from '../shared/SectionTitle.astro';
+import empresa from '../../data/empresa.json';
+import valores from '../../data/valores.json';
+import { asset } from '../../lib/url';
+---
+
+<section id="nosotros" class="contenedor scroll-mt-24 py-20 sm:py-24">
+  <div class="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
+    <div>
+      <SectionTitle etiqueta="Nosotros" titulo="Casi 30 años creciendo junto a nuestros clientes" />
+
+      <p class="revelar prosa mt-6">{empresa.descripcionLarga}</p>
+
+      <p class="revelar prosa mt-4">
+        Hoy trabajan en Petroarsa más de 100 personas distribuidas en {empresa.puntosDeVenta} puntos
+        de venta entre Yerba Buena, Cevil Pozo, Lastenia y Concepción.
+      </p>
+
+      <div class="revelar mt-8 overflow-hidden rounded-2xl">
+        <img
+          src={asset('/imagenes/hero/servicios-bridgestone.jpg')}
+          alt="Técnico de Petroarsa realizando una alineación en el centro de servicios"
+          width="1024"
+          height="768"
+          loading="lazy"
+          decoding="async"
+          class="h-full w-full object-cover"
+        />
+      </div>
+    </div>
+
+    <div class="grid gap-5">
+      <article class="revelar rounded-3xl bg-brand-primary p-8 text-white">
+        <span class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-white/15">
+          <Icon name="lucide:telescope" class="h-5 w-5" />
+        </span>
+        <h3 class="mt-5 text-2xl text-white">Visión</h3>
+        <p class="mt-3 leading-relaxed text-white/85">{valores.vision}</p>
+      </article>
+
+      <article class="revelar tarjeta p-8">
+        <span
+          class="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-brand-accent text-white"
+        >
+          <Icon name="lucide:target" class="h-5 w-5" />
+        </span>
+        <h3 class="mt-5 text-2xl text-brand-ink">Misión</h3>
+        <p class="prosa mt-3">{valores.mision}</p>
+      </article>
+
+      <article class="revelar tarjeta p-8">
+        <h3 class="text-lg text-brand-ink">Competencias que buscamos</h3>
+        <ul class="mt-4 flex flex-wrap gap-2">
+          {valores.competencias.map((c) => <li class="etiqueta normal-case">{c}</li>)}
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>

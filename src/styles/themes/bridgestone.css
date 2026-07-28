@@ -1,0 +1,24 @@
+/*
+  Tema Bridgestone — rojo + negro.
+  Ojo accesibilidad: el rojo #E30613 sobre blanco da ~4.1:1, por debajo de
+  AA para texto chico. Por eso el texto de cuerpo usa --brand-ink (negro) y el
+  rojo queda reservado para fondos sólidos, bordes y titulares grandes (≥24px).
+*/
+[data-theme='bridgestone'] {
+  --brand-primary: #e30613; /* Rojo Bridgestone */
+  --brand-primary-mid: #b8050f;
+  --brand-accent: #000000; /* Negro */
+  --brand-accent-light: #333333;
+  --brand-bg: #ffffff;
+  --brand-bg-alt: #f4f4f5;
+  --brand-ink: #000000;
+  --brand-ink-soft: #4a4a4a;
+  --brand-line: #e0e0e0;
+
+  /* Titulares industriales */
+  --font-display: 'Archivo Variable', 'Archivo';
+  --display-weight: 800;
+  --display-tracking: -0.03em;
+
+  --brand-gradient: linear-gradient(100deg, #e30613 0%, #b8050f 55%, #000000 100%);
+}

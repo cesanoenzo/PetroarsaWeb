@@ -1,0 +1,8 @@
+<!-- PLACEHOLDER con los colores oficiales Bridgestone (rojo #E30613 / negro).
+     Reemplazar por el SVG oficial. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 48" role="img" aria-label="Bridgestone">
+  <path d="M14 10 L30 10 L22 24 L30 38 L14 38 L6 24 Z" fill="#E30613"/>
+  <text x="38" y="31" fill="#000000"
+        font-family="Archivo Variable, Archivo, Helvetica, Arial, sans-serif"
+        font-size="17" font-weight="800" letter-spacing="-0.4">BRIDGESTONE</text>
+</svg>
