@@ -1,7 +1,7 @@
 # PetroarsaWeb
 
 Sitio institucional y de catálogo de **Petroarsa S.A.** — Astro 4 + Tailwind 3, 100% estático,
-pensado para GitHub Pages.
+desplegado en Vercel.
 
 - Home institucional con la identidad Petroarsa (verde + naranja).
 - Tres secciones de unidad de negocio, cada una con la paleta de su marca partner:
@@ -185,40 +185,35 @@ El formulario usa **Web3Forms** (sin backend, funciona incluso con JavaScript de
 
 ---
 
-## 6. Deploy en GitHub Pages
+## 6. Deploy en Vercel
 
-Cuenta configurada: **`cesanoenzo`**. Repo: **`PetroarsaWeb`**.
+Repo: <https://github.com/cesanoenzo/PetroarsaWeb> · Hosting: **Vercel**.
 
-**Una sola vez:**
-
-1. Creá el repositorio en <https://github.com/new> con el nombre exacto **`PetroarsaWeb`**, sin
-   README, sin `.gitignore` y sin licencia (el repo local ya tiene todo eso).
-2. Conectá el repo local y subí:
+Vercel está conectado al repo, así que **no hay nada que ejecutar a mano**: cada `git push` a
+`main` publica producción, y cada push a otra rama genera una URL de preview.
 
 ```bash
-git remote add origin https://github.com/cesanoenzo/PetroarsaWeb.git
+git add . && git commit -m "Descripción del cambio" && git push
 ```
 
-```bash
-git push -u origin main
-```
+Configuración en Vercel (ya detectada automáticamente por el preset Astro, no hace falta tocarla):
 
-3. En **Settings → Pages**, elegí **Source: GitHub Actions** (no "Deploy from a branch").
+| Campo | Valor |
+|---|---|
+| Framework Preset | Astro |
+| Root Directory | `./` |
+| Build Command | por defecto (`npm run build`) |
+| Output Directory | por defecto (`dist`) |
+| Install Command | por defecto |
 
-**De ahí en adelante:** cada `git push` a `main` dispara el workflow de
-`.github/workflows/deploy.yml` y publica solo.
-
-La URL final es <https://cesanoenzo.github.io/PetroarsaWeb/>.
-
-> **Repo privado:** GitHub Pages sobre un repositorio privado requiere plan **GitHub Pro**. Con
-> cuenta gratuita el workflow compila pero el sitio no queda publicado. Si hace falta, se pasa el
-> repo a público desde *Settings → General → Change repository visibility*, sin tocar el código.
+> **Importante:** este proyecto **no lleva `base` en `astro.config.mjs`** porque en Vercel el sitio
+> se sirve desde la raíz del dominio. No lo agregues salvo que se migre a un hosting con sub-path.
 
 ### Si más adelante se compra un dominio propio
 
-1. Creá `public/CNAME` con una sola línea: `petroarsa.com.ar`.
-2. En `astro.config.mjs`: `site: 'https://petroarsa.com.ar'` y **borrá** la línea `base`.
-3. En el DNS del dominio, un registro `CNAME` apuntando a `cesanoenzo.github.io`.
+1. En Vercel: **Settings → Domains → Add**, y seguí las instrucciones de DNS que te da.
+2. En `astro.config.mjs`, cambiá `SITE` por el dominio final (`https://petroarsa.com.ar`). Eso
+   corrige el sitemap, las URLs canónicas y las metatags de Open Graph.
 
 ---
 

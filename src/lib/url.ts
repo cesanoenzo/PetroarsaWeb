@@ -1,13 +1,13 @@
 /**
  * Helpers de URL.
  *
- * El sitio vive bajo un sub-path en GitHub Pages (`/PetroarsaWeb/`), así que
- * NINGÚN href ni src puede empezar con "/" a secas: hay que prefijar la base.
- * Estos helpers centralizan eso para que el día que se compre un dominio propio
- * alcance con borrar `base` en astro.config.mjs y todo siga funcionando.
+ * En Vercel el sitio se sirve desde la raíz, así que hoy `BASE` es '/' y estos
+ * helpers no agregan nada. Existen igual para que, si alguna vez el sitio se
+ * mueve a un hosting con sub-path (GitHub Pages, por ejemplo), alcance con
+ * poner `base` en astro.config.mjs: ningún href ni src queda hardcodeado.
  */
 
-const BASE = import.meta.env.BASE_URL; // '/PetroarsaWeb/' o '/'
+const BASE = import.meta.env.BASE_URL; // '/' en Vercel
 
 /** Link a una página interna. Devuelve siempre con barra final (trailingSlash: 'always'). */
 export function ruta(path = '/'): string {
