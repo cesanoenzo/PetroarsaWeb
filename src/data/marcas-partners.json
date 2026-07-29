@@ -2,43 +2,37 @@
   {
     "id": "ypf",
     "nombre": "YPF",
-    "logo": "/logos-partners/ypf.svg",
+    "logo": "/logos-partners/ypf.png",
+    "ancho": 632,
+    "alto": 160,
     "desde": 1996,
     "url": "https://www.ypf.com"
   },
   {
     "id": "ypf-agro",
     "nombre": "YPF Agro",
-    "logo": "/logos-partners/ypf-agro.svg",
+    "logo": "/logos-partners/ypf-agro.png",
+    "ancho": 264,
+    "alto": 160,
     "desde": 1999,
     "url": "https://www.ypfagro.com.ar"
   },
   {
     "id": "bridgestone",
     "nombre": "Bridgestone",
-    "logo": "/logos-partners/bridgestone.svg",
+    "logo": "/logos-partners/bridgestone.png",
+    "ancho": 282,
+    "alto": 160,
     "desde": 2009,
     "url": "https://www.bridgestone.com.ar"
   },
   {
-    "id": "firestone",
-    "nombre": "Firestone",
-    "logo": "/logos-partners/firestone.svg",
-    "desde": 2009,
-    "url": "https://www.firestone.com.ar"
-  },
-  {
     "id": "varta",
     "nombre": "VARTA",
-    "logo": "/logos-partners/varta.svg",
+    "logo": "/logos-partners/varta.png",
+    "ancho": 799,
+    "alto": 160,
     "desde": 1998,
     "url": "https://www.varta-automotive.com"
-  },
-  {
-    "id": "elaion",
-    "nombre": "Elaion",
-    "logo": "/logos-partners/elaion.svg",
-    "desde": 2004,
-    "url": "https://www.ypf.com/productosyservicios/paginas/elaion.aspx"
   }
 ]

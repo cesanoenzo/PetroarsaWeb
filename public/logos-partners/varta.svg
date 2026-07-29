@@ -1,9 +1,0 @@
-<!-- PLACEHOLDER con los colores oficiales VARTA (azul #002F5F / amarillo #FDB813).
-     Reemplazar por el SVG oficial. -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 48" role="img" aria-label="VARTA">
-  <rect x="4" y="10" width="132" height="28" rx="3" fill="#002F5F"/>
-  <rect x="4" y="34" width="132" height="4" rx="2" fill="#FDB813"/>
-  <text x="70" y="30" text-anchor="middle" fill="#ffffff"
-        font-family="Archivo Variable, Archivo, Helvetica, Arial, sans-serif"
-        font-size="18" font-weight="800" letter-spacing="2">VARTA</text>
-</svg>

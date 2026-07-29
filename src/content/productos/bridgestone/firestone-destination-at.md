@@ -26,7 +26,6 @@ tags:
   - "Caminos de tierra"
 destacado: false
 disponibleEn:
-  - "cs-bridgestone-yerba-buena"
   - "bts-lastenia"
 orden: 40
 ---

@@ -56,20 +56,6 @@
     "desde": null
   },
   {
-    "id": "cs-bridgestone-yerba-buena",
-    "nombre": "Centro de Servicios Bridgestone Yerba Buena",
-    "tipo": "Centro de servicios Bridgestone",
-    "unidad": "bridgestone",
-    "direccion": "Yerba Buena",
-    "localidad": "Yerba Buena, Tucumán",
-    "coordenadas": { "lat": null, "lng": null },
-    "telefono": null,
-    "horarios": "Lunes a viernes de 8:30 a 13 y de 16:30 a 20:30 · Sábados de 9 a 13 hs",
-    "servicios": ["Neumáticos", "Alineación", "Balanceo", "Tren delantero", "Suspensión"],
-    "imagen": "/imagenes/sucursales/cs-bridgestone-yerba-buena.jpg",
-    "desde": 2009
-  },
-  {
     "id": "bts-lastenia",
     "nombre": "Centro de Servicios BTS Lastenia",
     "tipo": "Centro de servicios Bridgestone",
@@ -79,8 +65,15 @@
     "coordenadas": { "lat": null, "lng": null },
     "telefono": null,
     "horarios": "Lunes a viernes de 8 a 18 hs · Sábados de 8 a 13 hs",
-    "servicios": ["Neumáticos de transporte", "Neumáticos agrícolas y viales", "Alineación", "Balanceo", "Lubricantes"],
+    "servicios": [
+      "Neumáticos",
+      "Alineación",
+      "Balanceo",
+      "Tren delantero",
+      "Suspensión",
+      "Lubricantes"
+    ],
     "imagen": "/imagenes/sucursales/bts-lastenia.jpg",
-    "desde": null
+    "desde": 2009
   }
 ]

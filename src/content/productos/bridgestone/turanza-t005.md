@@ -27,7 +27,7 @@ tags:
   - "Confort"
 destacado: true
 disponibleEn:
-  - "cs-bridgestone-yerba-buena"
+  - "bts-lastenia"
 orden: 20
 ---
 

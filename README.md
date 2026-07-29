@@ -1,4 +1,4 @@
-# PetroarsaWeb
+﻿# PetroarsaWeb
 
 Sitio institucional y de catálogo de **Petroarsa S.A.** — Astro 4 + Tailwind 3, 100% estático,
 desplegado en Vercel.
@@ -13,21 +13,18 @@ desplegado en Vercel.
 
 ## 1. Requisitos
 
-- **Node.js 20 LTS** o superior (hay un `.nvmrc` con `20`).
-- **pnpm** recomendado (`npm i -g pnpm`). Si preferís npm, funciona igual: cambiá `pnpm` por `npm`
-  en todos los comandos.
-
-> En esta PC todavía no está instalado Node. Descargalo de <https://nodejs.org> (versión LTS),
-> reiniciá la terminal y verificá con `node -v`.
+- **Node.js 20 LTS** o superior (hay un `.nvmrc` con `20`; probado con 24).
+- **npm**, que viene con Node. El proyecto tiene `package-lock.json` commiteado, así que todos
+  instalamos exactamente las mismas versiones.
 
 ## 2. Instalar y levantar en local
 
 ```bash
-pnpm install
+npm install
 ```
 
 ```bash
-pnpm dev
+npm run dev
 ```
 
 Abre <http://localhost:4321/>.
@@ -35,17 +32,17 @@ Abre <http://localhost:4321/>.
 Otros comandos:
 
 ```bash
-pnpm build
+npm run build
 ```
 
 ```bash
-pnpm preview
+npm run preview
 ```
 
 Para validar tipos y el frontmatter de todos los productos, por separado:
 
 ```bash
-pnpm check
+npm run check
 ```
 
 `check` está fuera de `build` a propósito: un error de tipos no tiene por qué frenar la
@@ -90,7 +87,7 @@ tags:
   - "Bajo consumo"
 destacado: false              # true = medalla "Destacado" en la tarjeta
 disponibleEn:                 # ids de src/data/sucursales.json
-  - "cs-bridgestone-yerba-buena"
+  - "bts-lastenia"
 orden: 50                     # menor = aparece antes
 ---
 
@@ -247,12 +244,18 @@ Para agregar un tema nuevo: creá el `.css` en `src/styles/themes/`, importalo e
 ## 8. Estructura del proyecto
 
 ```
+Logos/                      Logos originales tal como los entrega cada marca (fuente)
+scripts/
+  preparar-logos.mjs        Convierte los de Logos/ en PNG transparentes para la web
+
 public/                     Archivos servidos tal cual (logos, fotos, PDFs)
-  logo-petroarsa.svg        Logo institucional (PROVISORIO, ver pendientes)
-  logos-partners/           YPF, Bridgestone, Firestone, VARTA, Elaion (PROVISORIOS)
+  logo-petroarsa.png        Logo institucional (color) — generado por el script
+  logo-petroarsa-blanco.png Versión monocroma para fondos oscuros
+  favicon.png               Isotipo recortado del logo
+  logos-partners/           YPF, YPF Agro, YPF Estaciones, Bridgestone, VARTA
   imagenes/
     hero/                   Banner institucional
-    sucursales/             Fotos reales de los 6 puntos de venta
+    sucursales/             Fotos reales de los 5 puntos de venta
     productos/              Fotos de catálogo + placeholders
   fichas-tecnicas/          PDFs por unidad
 
@@ -292,7 +295,7 @@ src/
 ## 9. De dónde salió el contenido
 
 El copy institucional (historia, visión, misión, valores, política de calidad, RSE, hitos) está
-tomado de las gacetillas internas N° 01, 02, 04, 06 y 07. Las fotos de los seis puntos de venta y
+tomado de las gacetillas internas N° 01, 02, 04, 06 y 07. Las fotos de los puntos de venta y
 el banner del hero también salen de esos PDFs.
 
 > **Revisar:** la asignación de cada foto a cada sucursal se dedujo del contenido de las imágenes.
@@ -303,11 +306,12 @@ el banner del hero también salen de esos PDFs.
 
 ## 10. Pendientes antes de publicar
 
-- [ ] **Logo oficial** de Petroarsa en SVG → reemplazar `public/logo-petroarsa.svg` y
-      `public/logo-petroarsa-blanco.svg`. Los actuales son una construcción provisoria con la
-      paleta institucional, **no** el logo oficial.
-- [ ] **Logos oficiales de partners** en SVG → reemplazar los de `public/logos-partners/`
-      (también provisorios; respetan los colores de cada marca pero no son los logos originales).
+- [x] ~~Logo oficial de Petroarsa~~ y ~~logos de YPF, YPF Agro, YPF Estaciones, Bridgestone y
+      VARTA~~ — cargados (ver sección 12).
+- [ ] **Logos de Firestone y Elaion** → mientras no estén, esas dos marcas no aparecen en la
+      tira de partners de la home. Poné los archivos en `Logos/`, sumalos al array `TRABAJOS` de
+      `scripts/preparar-logos.mjs`, corré el script y agregá la entrada en
+      `src/data/marcas-partners.json`.
 - [ ] **Datos de contacto reales** en `src/data/empresa.json`: email, teléfono, WhatsApp y
       dirección administrativa (hoy hay placeholders).
 - [ ] **Access Key de Web3Forms** (sección 5).
@@ -333,3 +337,31 @@ y `decoding="async"`, así que no hay saltos de layout (CLS) ni descargas innece
 
 Si más adelante se prefiere la optimización automática, hay que mover las fotos a `src/assets/` y
 resolverlas con `import.meta.glob` en `ProductCard.astro` y `ProductGallery.astro`.
+
+---
+
+## 12. Logos: cómo agregar o actualizar uno
+
+Los originales viven en `Logos/` tal como los entrega cada marca (JPG o PNG sobre fondo blanco).
+No se usan directamente: un script los convierte a PNG con fondo transparente, recortados y
+escalados.
+
+```bash
+node scripts/preparar-logos.mjs
+```
+
+El script recorta el blanco de los bordes, arma el canal alfa por umbral (lo casi-blanco pasa a
+transparente) y escala a 160 px de alto. Además deriva dos archivos del logo de Petroarsa: la
+versión monocroma blanca para el footer y el favicon con sólo el isotipo.
+
+**Para sumar un logo nuevo:**
+
+1. Poné el original en `Logos/`.
+2. Agregá una línea al array `TRABAJOS` de `scripts/preparar-logos.mjs`.
+3. Corré el script; te imprime las dimensiones finales de cada archivo.
+4. Si es un partner de la tira de la home, agregá la entrada en `src/data/marcas-partners.json`
+   con esas dimensiones en `ancho` y `alto`.
+
+> Los logos van sobre pastilla blanca en los heros de unidad, que son oscuros. Es a propósito:
+> invertirlos a blanco alteraría marcas como Bridgestone (negro + rojo) o YPF Agro (negro +
+> verde).

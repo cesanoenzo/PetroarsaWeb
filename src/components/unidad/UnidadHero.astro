@@ -8,10 +8,22 @@ interface Props {
   bajada: string;
   imagen: string;
   logoPartner?: string;
+  /** Dimensiones reales del logo, para reservar el espacio y evitar CLS. */
+  logoPartnerAncho?: number;
+  logoPartnerAlto?: number;
   acciones?: { texto: string; href: string; externo?: boolean; primaria?: boolean }[];
 }
 
-const { etiqueta, titulo, bajada, imagen, logoPartner, acciones = [] } = Astro.props;
+const {
+  etiqueta,
+  titulo,
+  bajada,
+  imagen,
+  logoPartner,
+  logoPartnerAncho = 282,
+  logoPartnerAlto = 160,
+  acciones = [],
+} = Astro.props;
 ---
 
 <section class="relative isolate overflow-hidden bg-brand-ink">
@@ -29,15 +41,20 @@ const { etiqueta, titulo, bajada, imagen, logoPartner, acciones = [] } = Astro.p
 
   <div class="contenedor relative py-20 sm:py-28">
     {
+      /* Los logos oficiales son a color (negro, rojo, verde) y se perderían
+         sobre el hero oscuro, así que van sobre una pastilla blanca en vez de
+         invertidos: se respeta la marca tal cual la entrega el proveedor. */
       logoPartner && (
-        <img
-          src={asset(logoPartner)}
-          alt=""
-          aria-hidden="true"
-          width="180"
-          height="48"
-          class="mb-7 h-11 w-auto brightness-0 invert"
-        />
+        <span class="mb-7 inline-flex rounded-xl bg-white px-4 py-3 shadow-lg">
+          <img
+            src={asset(logoPartner)}
+            alt=""
+            aria-hidden="true"
+            width={logoPartnerAncho}
+            height={logoPartnerAlto}
+            class="h-8 w-auto max-w-[11rem] object-contain sm:h-9"
+          />
+        </span>
       )
     }
 
