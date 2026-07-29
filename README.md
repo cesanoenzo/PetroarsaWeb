@@ -30,8 +30,7 @@ pnpm install
 pnpm dev
 ```
 
-Abre <http://localhost:4321/PetroarsaWeb/> (el sub-path `/PetroarsaWeb` viene del `base` de
-`astro.config.mjs`, igual que en producción).
+Abre <http://localhost:4321/>.
 
 Otros comandos:
 
@@ -43,8 +42,14 @@ pnpm build
 pnpm preview
 ```
 
-`pnpm build` corre `astro check` primero, así que también valida los tipos y el frontmatter de
-todos los productos.
+Para validar tipos y el frontmatter de todos los productos, por separado:
+
+```bash
+pnpm check
+```
+
+`check` está fuera de `build` a propósito: un error de tipos no tiene por qué frenar la
+publicación del sitio.
 
 ---
 
