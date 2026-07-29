@@ -7,9 +7,12 @@ import { defineCollection, z } from 'astro:content';
  * archivo (src/content/productos/<carpeta>/...). Ver src/lib/catalogo.ts.
  * De esa forma agregar un producto = crear un .md en la carpeta correcta.
  */
+// OJO: `slug` NO va en el schema. Astro lo reserva para generar la URL y tira
+// ContentSchemaContainsSlugError si aparece acá. Igual se puede poner `slug:`
+// en el frontmatter de un .md para personalizar la URL: Astro lo lee aparte y
+// queda en `entry.slug` (ver slugDe() en src/lib/catalogo.ts).
 const productoSchema = z.object({
   titulo: z.string(),
-  slug: z.string().optional(),
   marca: z.enum(['Bridgestone', 'Firestone', 'YPF', 'YPF Agro', 'Elaion', 'VARTA']),
   categoria: z.string(), // ej. "Neumático SUV", "Lubricante sintético"
   subcategoria: z.string().optional(),

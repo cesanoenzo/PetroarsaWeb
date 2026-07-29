@@ -86,7 +86,7 @@ const jsonLd = {
     <!-- Transiciones suaves entre páginas (RF-01) -->
     <ViewTransitions />
 
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
   </head>
 
   <body>

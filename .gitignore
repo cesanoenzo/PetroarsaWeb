@@ -8,6 +8,9 @@ node_modules/
 # astro
 .astro/
 
+# config local de herramientas (tiene rutas absolutas de esta máquina)
+.claude/
+
 # entornos
 .env
 .env.production

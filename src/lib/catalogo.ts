@@ -19,9 +19,14 @@ export function carpetaDe(p: Producto): string {
   return p.id.split('/')[0];
 }
 
-/** Slug final del producto, sin carpeta ni extensión. Respeta `slug:` del frontmatter. */
+/**
+ * Slug final del producto, sin la carpeta.
+ * `p.slug` lo genera Astro: es "carpeta/nombre-archivo", o el `slug:` del
+ * frontmatter si el .md define uno propio. En ambos casos alcanza con quedarse
+ * con el último segmento.
+ */
 export function slugDe(p: Producto): string {
-  return p.data.slug ?? p.slug.split('/').pop()!;
+  return p.slug.split('/').pop()!;
 }
 
 /** Ruta pública del producto, ej. "/ypf-agro/urea-granulada/" (sin la base del sitio). */
